@@ -29,8 +29,9 @@ SCRIPT_DIR=$(dirname "$(realpath "$0")")
 cd "$SCRIPT_DIR/.."
 
 # Set the default source
-ION_VER="4.1.2"
-ION_SRC_URL="https://sourceforge.net/projects/ion-dtn/files/ion-open-source-$ION_VER.tar.gz"
+ION_VER="4.1.3"
+ION_SRC_URL=https://github.com/nasa-jpl/ION-DTN/archive/refs/tags/ion-open-source-$ION_VER.tar.gz
+#ION_SRC_URL="https://sourceforge.net/projects/ion-dtn/files/ion-open-source-$ION_VER.tar.gz"
 SOURCE_PATH=$1
 
 if [[ -z "$1" ]]; then
@@ -172,7 +173,7 @@ SOURCES=(
 	$SOURCE_PATH/bpv7/udp/libudpcla.c
 	$SOURCE_PATH/bpv7/test/bpchat.c
 
-# New for 4.1.2 (WSL)
+
 	$SOURCE_PATH/bpv7/bpsec/utils/bpsec_asb.c
 	$SOURCE_PATH/bpv7/bpsec/sci/sci.c
 	$SOURCE_PATH/bpv7/bpsec/sci/sc_value.c
@@ -277,7 +278,6 @@ HEADERS=(
 	$SOURCE_PATH/bpv7/library/ext/imc/imc.h
 	$SOURCE_PATH/bpv7/udp/udpcla.h
 
-# New for 4.1.2 (WSL)
 	$SOURCE_PATH/bpv7/bpsec/sci/sci.h
 	$SOURCE_PATH/bpv7/bpsec/sci/sci_structs.h
 	$SOURCE_PATH/bpv7/bpsec/utils/bpsec_asb.h

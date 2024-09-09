@@ -2,6 +2,8 @@
 
 - [ION-Core for Linux (and WSL)](#ion-core-for-linux-and-wsl)
   - [Build \& Install](#build--install)
+    - [Manually get the ION Open Source Code and Build ion-core](#manually-get-the-ion-open-source-code-and-build-ion-core)
+    - [Automatically get the ION Open Source Code and Build ion-core](#automatically-get-the-ion-open-source-code-and-build-ion-core)
   - [Selecting ION-core Features to Build](#selecting-ion-core-features-to-build)
   - [Man Page Installation](#man-page-installation)
   - [Creating ION configuration (".rc") files for a two-node setup](#creating-ion-configuration-rc-files-for-a-two-node-setup)
@@ -21,23 +23,29 @@ sudo apt update
 sudo apt install make gcc
 ```
 
+### Manually get the ION Open Source Code and Build ion-core
+
 Get the ION Open Source Code:
 ```bash
-wget https://sourceforge.net/projects/ion-dtn/files/ion-open-source-4.1.2.tar.gz
-tar -zxvf ion-open-source-4.1.2.tar.gz
+wget https://github.com/nasa-jpl/ION-DTN/archive/refs/tags/ion-open-source-4.1.3.tar.gz
+tar -zxvf ion-open-source-4.1.3.tar.gz
 ```
 
 Get the ION-Core Repo, Extract Source File, Build and Install
 ```bash
 git clone https://github.com/nasa-jpl/ion-core.git
 cd ion-core
-git checkout tags/4.1.2
-./scripts/extract.sh ../ion-open-source-4.1.2
+git checkout tags/4.1.3
+./scripts/extract.sh ../ion-open-source-4.1.3
 make
 sudo make install
 ```
 
-You can also run `./scripts/extract.sh` without supplying the path to an existing ION source code folder. In that case, the script will automatically download the appropriate ION open source code into a `./tmp` directory and extract the needed files into ion-core.
+### Automatically get the ION Open Source Code and Build ion-core
+
+You can also run `./scripts/extract.sh` without supplying the path to an existing ION source code folder. In that case, the script will automatically download the appropriate ION open source code into a `tmp` directory and extract the needed files into ion-core.
+
+Then run `make` and `sudo make install`.
 
 ## Selecting ION-core Features to Build
 
