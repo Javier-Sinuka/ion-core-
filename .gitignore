@@ -8,3 +8,5 @@
 /host*_testdir
 ion.log
 .gitkeep
+system_up
+tests/*
