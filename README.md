@@ -16,6 +16,9 @@
   - [Contributing Code](#contributing-code)
   - [WSL2 Networking Issue](#wsl2-networking-issue)
   - [Release Notes](#release-notes)
+      - [Tag(to be added): `4.1.3`](#tagto-be-added-413)
+      - [Tag: `4.1.2a`](#tag-412a)
+      - [Tag: `4.1.2`](#tag-412)
 
 ## Build & Install
 
@@ -127,6 +130,51 @@ Note:
 * To ensure that all bping messages will be received by the peer DTN node, it is recommended that you run bping-echo on the second host first, and then run bping-send on the first host.
 * Both `bping-send.sh` and `bping-echo.sh` takes an optional 3rd argument to specify either the `udp` or `stcp` CLAs. But they must be the same on both hosts to ensure compatibility.
 
+On `bping` side, you will see ION starting and then bping launched automatically with output similar to the following:
+
+```bash
+... Wait 10 seconds for the other side to start ION...
+
+run bping...
+64 bytes from ipn:12.2  seq=0 time=0.003641 s
+64 bytes from ipn:12.2  seq=1 time=0.001756 s
+64 bytes from ipn:12.2  seq=2 time=0.001767 s
+64 bytes from ipn:12.2  seq=3 time=0.001590 s
+64 bytes from ipn:12.2  seq=4 time=0.001676 s
+64 bytes from ipn:12.2  seq=5 time=0.001711 s
+64 bytes from ipn:12.2  seq=6 time=0.001766 s
+64 bytes from ipn:12.2  seq=7 time=0.001742 s
+64 bytes from ipn:12.2  seq=8 time=0.001675 s
+64 bytes from ipn:12.2  seq=9 time=0.001663 s
+10 bundles transmitted, 10 bundles received, 0.00% bundle loss, time 19.003910 s
+rtt min/avg/max/sdev = 1.590/1.898/3.641/0.585 ms
+
+bping SUCCESS!
+```
+
+On the receiving (echo) side, you will likely see:
+
+```bash
+Start bpecho...., Ctrl-C to stop.
+..........
+```
+Each `.` indicates that an 'echo' message has been sent back to acknowledge the reception of a 'bping' messages.
+
+The test will end once the bping recieved echos for all ping messages.
+
+At this point, ION will be running on both hosts and you may continue to run different applications until you stop ION by executing the `ionstop` script, which is globally installed for execution.
+
+This test also generates two directories that you can use as template for future ION testing:
+
+* `hostxx_testdir` - this directory contains the ION configuration files for host A, whose IP address ends in `xx`.
+* `hostyy_testdir` - this directory contains the ION configuration files for host A, whose IP address ends in `yy`.
+
+Within in each folder, you will find the ION log file `ion.log` which records the main events during previous runs and also, if present, current/on-going running instance of ION.
+
+To launch ION manually, you will need to enter into the directory and execute the command `ionstart -I hostxx.rc`
+
+Using the generated ION configuration folder, you can only launch one ION instance per host. To ability to run multiple ION instances in one host is utilized in automated regression testing (recall `make test`) and is a advanced topic described in the [ION online documentation](https://nasa-jpl.github.io/ION-DTN/).
+
 ## Adjusting Pre-Allocation of Memory/Storage Space for ION
 
 ION is designed to run within a pre-allocated memory space. If, while running ION, you encounter errors due to a lack of working memory or SDR heap space, you can increase the pre-allocated allocation by modifying the `host.ionconfig` file and then regenerate configuration files using the `./scripts/host.sh` command. The current default ION SDR and working memory allocation is as follows:
@@ -182,16 +230,21 @@ https://github.com/sakai135/wsl-vpnkit
 
 Latest Release
 
-Tag: `4.1.2a`
+#### Tag(to be added): `4.1.3`
+
+9/10/2024
+* Update codebase to ION open source verion 4.1.3
+* Add regression test for each available CLA
+
+
+#### Tag: `4.1.2a`
 
 2/01/2024
-
 * Added STCP CLA to ver 4.1.2
 
-Tag: `4.1.2`
+#### Tag: `4.1.2`
 
 11/30/2023
-
 * Based on ION Open Source 4.1.2
 * Initial public release of ion-core (prototype)
 * Basic features:
