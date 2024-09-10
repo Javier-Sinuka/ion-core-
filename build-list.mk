@@ -41,12 +41,16 @@ PROGRAMS += bpsink bpsource bpecho bping bpstats bptrace
 # This list can be modified. At least one CLA must be included.
 # ICI
 PROGRAMS += psmwatch sdrwatch 
-# BPv7
+## BPv7
 PROGRAMS += bpversion 
+## Load-and-Go Command
 PROGRAMS += lgagent lgsend
-# CLA: must include at least one of STCP, UDP, or LTP 
+# CLA: must include at least one of STCP, UDP, or LTP
+## STCP CLA
 PROGRAMS += stcpcli stcpclo 
+## UDP CLA
 PROGRAMS += udpcli udpclo 
+## LTP CLA
 PROGRAMS += ltpcli ltpclo udplsi udplso ltpclock ltpdeliv ltpmeter ltpadmin
 
 # Utility Programs

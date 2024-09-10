@@ -7,6 +7,8 @@
   - [Selecting ION-core Features to Build](#selecting-ion-core-features-to-build)
   - [Man Page Installation](#man-page-installation)
   - [Creating ION configuration (".rc") files for a two-node setup](#creating-ion-configuration-rc-files-for-a-two-node-setup)
+  - [Post installation test](#post-installation-test)
+  - [Clean up process](#clean-up-process)
   - [Automated Script to Build, Install, and Test Ion-core on Two Hosts](#automated-script-to-build-install-and-test-ion-core-on-two-hosts)
   - [Adjusting Pre-Allocation of Memory/Storage Space for ION](#adjusting-pre-allocation-of-memorystorage-space-for-ion)
   - [Tuning LTP Performance](#tuning-ltp-performance)
@@ -86,6 +88,24 @@ To generate configuration files using either UDP or the STCP CLA, add either `ud
 Similar syntax goes for udp.
 
 To use other convergence layers such as UDP or STCP, you will need to modify the .rc files. See the ION documentation for more information. For example, you may consult the [ION Configuration Tutorials and Configuration Templates.](https://nasa-jpl.github.io/ION-DTN/Basic-Configuration-File-Tutorial/)
+
+## Post installation test
+
+After installation, you can run the following command to test the installation for each of the CLAs included in the build:
+
+```bash
+make test
+```
+
+The result of the test will be captured in a file, in the `tests` directory, under the name `progress`. Previous test results will be moved to a new file with date-time stamps.
+
+There are three tests currently available: `bench-ltp`, `bench-stcp`, and `bench-udp`. Each test will be invoked if the corresponding CLA is included in the build. Each test includes attempts to send different combinations of number of bundles and bundle sizes. If all transmissions are successful, the test will be marked as PASSED. If not, the test output on the console as well as the `progress` file will capture data for analysis.
+
+## Clean up process
+
+To remove executables and libraries installed in the host, run: `sudo make clean`
+To clean up the compilation artifacts, run: `make clean`
+To remove all complication artifacts, as well as all ION source and test files extracted from the ION open source code, run: `make distclean`
 
 ## Automated Script to Build, Install, and Test Ion-core on Two Hosts
 

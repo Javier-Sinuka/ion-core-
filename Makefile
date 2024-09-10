@@ -12,6 +12,25 @@ endif
 
 $(info build-list.mk has been included, proceed to build.)
 
+###########################################
+# Build a test list based on selected CLAs
+###########################################
+# Initialize TEST_LIST as empty
+TEST_LIST :=
+
+# Conditionally add to TEST_LIST based on the contents of PROGRAMS
+ifeq ($(filter stcpcli, $(PROGRAMS)), stcpcli)
+    TEST_LIST += bench-stcp
+endif
+
+ifeq ($(filter udpcli, $(PROGRAMS)), udpcli)
+    TEST_LIST += bench-udp
+endif
+
+ifeq ($(filter ltpcli, $(PROGRAMS)), ltpcli)
+    TEST_LIST += bench-ltp
+endif
+
 ###########################
 # Build Rules
 ###########################
@@ -25,6 +44,7 @@ export INC = $(PWD)/inc
 export OUT_BIN = $(PWD)/bin
 export MAN = $(PWD)/man
 export SCR = $(PWD)/scripts
+export TESTS = $(PWD)/tests
 
 # Just locally:
 MDIR = $(PWD)/mdir
@@ -104,16 +124,24 @@ clean:
 	@find $(OUT_BIN) -type f ! -name '.gitkeep' ! -name 'ionstart' ! -name 'ionstart.awk' ! -name 'ionstop' ! -name 'killm' -exec rm -f {} + > /dev/null
 	@find $(LIB) -type f ! -name '.gitkeep' -exec rm -f {} + > /dev/null
 
+test:
+	@cd $(TESTS) && ./runtests $(TEST_LIST)
+
 uninstall:
 	@rm -f $(INSTALL_PATH)/bin/*
 	@rm -f $(INSTALL_PATH)/man/*
 
+## Clean up all build artifacts + all source files extracted from ION open source code
 distclean:
 	@find $(INC) -mindepth 1 ! -name '.gitkeep' -exec rm -rf {} + > /dev/null
 	@find $(SRC) -mindepth 1 ! -name '.gitkeep' -exec rm -rf {} + > /dev/null
 	@find $(LIB) -mindepth 1 ! -name '.gitkeep' -exec rm -rf {} + > /dev/null
 	@find $(OUT_BIN) -mindepth 1 ! -name '.gitkeep' -exec rm -rf {} + > /dev/null
 	@find $(MAN) -mindepth 1 ! -name '.gitkeep' -exec rm -rf {} + > /dev/null
+	@find $(TESTS) -mindepth 1 ! -name '.gitkeep' -exec rm -rf {} + > /dev/null
+	@rm system_up > /dev/null
+
+
 
 
 

@@ -55,6 +55,7 @@ SRC=src
 INC=inc
 OUT_BIN=bin
 MAN=man
+TESTS=tests
 
 SOURCES=(
 	$SOURCE_PATH/bpv7/library/ext/bpsec/bcb.c
@@ -345,6 +346,19 @@ MANPAGE=(
 	$SOURCE_PATH/bpv7/doc/pod1/stcpclo.pod
 	)
 
+TEST_SCRIPTS=(
+	$SOURCE_PATH/tests/runtests
+	$SOURCE_PATH/tests/cleanup
+	$SOURCE_PATH/tests/setacs.sh
+	$SOURCE_PATH/system_up
+)
+
+TEST_DIRS=(
+	$SOURCE_PATH/demos/bench-udp
+	$SOURCE_PATH/demos/bench-ltp
+	$SOURCE_PATH/demos/bench-stcp
+)
+
 # Function to clear the content of a directory
 clear_directory() {
     if [ -d "$1" ] && [ "$(ls -A "$1")" ]; then
@@ -359,6 +373,7 @@ clear_directory() {
 clear_directory "$SRC"
 clear_directory "$INC"
 clear_directory "$OUT_BIN"
+clear_directory "$TESTS"
 
 echo "Extracting source .c files from $SOURCE_PATH to $SRC"
 count=0
@@ -406,6 +421,33 @@ while [ "x${MANPAGE[count]}" != "x" ]
 		if cp "${MANPAGE[count]}" $SRC/$MAN/
 		then echo found "${MANPAGE[count]}"
 			else echo ERROR: "${MANPAGE[count]}" is missing or has moved. Aborting.
+			break
+		fi
+	count=$(( $count + 1 ))
+done
+
+echo "Extracting test scripts from $SOURCE_PATH to $TESTS"
+count=0
+while [ "x${TEST_SCRIPTS[count]}" != "x" ]
+	do
+		if cp "${TEST_SCRIPTS[count]}" $TESTS
+		then echo found "${TEST_SCRIPTS[count]}"
+			else echo ERROR: "${TEST_SCRIPTS[count]}" is missing or has moved. Aborting.
+			break
+		fi
+	count=$(( $count + 1 ))
+done
+
+echo "Place 'system_up' script in root directory"
+cp $TESTS/system_up $TESTS/.. 
+
+echo "Extracting test sets from $SOURCE_PATH to $TESTS"
+count=0
+while [ "x${TEST_DIRS[count]}" != "x" ]
+	do
+		if cp -r "${TEST_DIRS[count]}" $TESTS
+		then echo found "${TEST_DIRS[count]}"
+			else echo ERROR: "${TEST_DIRS[count]}" is missing or has moved. Aborting.
 			break
 		fi
 	count=$(( $count + 1 ))
