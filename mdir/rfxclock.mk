@@ -1,22 +1,16 @@
+# Include ICI Source
+include $(MDIR)/libici.mk
+
+# test if inclusion is successful
+ifndef LIBICI_INCLUDED
+$(error libici.mk is not found or not included, cannot build.)
+endif
+
+#$(info libici.mk has been included, proceed to build.)
 
 SRC_rfxclock := \
 	$(SRC)/rfxclock.c \
-	$(SRC)/platform_sm.c \
-	$(SRC)/ion.c \
-	$(SRC)/rfx.c \
-	$(SRC)/smlist.c \
-	$(SRC)/psm.c \
-	$(SRC)/platform.c \
-	$(SRC)/smrbt.c \
-	$(SRC)/sdrxn.c \
-	$(SRC)/memmgr.c \
-	$(SRC)/sdrcatlg.c \
-	$(SRC)/sdrlist.c \
-	$(SRC)/zco.c \
-	$(SRC)/sdrmgt.c \
-	$(SRC)/sptrace.c \
-	$(SRC)/lyst.c \
-	$(SRC)/bulk.c
+	$(SRC_libici)
 
 rfxclock:
 	$(GCC) $(CFLAG) $(SRC_rfxclock) \

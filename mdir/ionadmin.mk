@@ -1,23 +1,16 @@
+# Include ICI Source
+include $(MDIR)/libici.mk
+
+# test if inclusion is successful
+ifndef LIBICI_INCLUDED
+$(error libici.mk is not found or not included, cannot build.)
+endif
+
+#$(info libici.mk has been included, proceed to build.)
 
 SRC_ionadmin := \
-	$(SRC)/sdrstring.c \
-	$(SRC)/rfx.c \
-	$(SRC)/bulk.c \
-	$(SRC)/zco.c \
-	$(SRC)/sdrlist.c \
-	$(SRC)/sdrcatlg.c \
-	$(SRC)/ion.c \
-	$(SRC)/smrbt.c \
-	$(SRC)/sdrmgt.c \
-	$(SRC)/lyst.c \
-	$(SRC)/memmgr.c \
-	$(SRC)/sptrace.c \
-	$(SRC)/psm.c \
-	$(SRC)/smlist.c \
-	$(SRC)/sdrxn.c \
-	$(SRC)/platform_sm.c \
-	$(SRC)/platform.c \
-	$(SRC)/ionadmin.c
+	$(SRC)/ionadmin.c \
+	$(SRC_libici)
 
 ionadmin:
 	$(GCC) $(CFLAG) $(SRC_ionadmin) \
