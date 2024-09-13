@@ -20,4 +20,11 @@ SRC_libici := \
 	$(SRC)/smlist.c \
 	$(SRC)/sdrxn.c \
 	$(SRC)/platform_sm.c \
-	$(SRC)/platform.c
+	$(SRC)/platform.c \
+	$(SRC)/sdrhash.c \
+	$(SRC)/sdrtable.c \
+	$(SRC)/csi.c \
+	$(SRC)/cbor.c \
+	$(SRC)/radix.c \
+	$(SRC)/crc.c \
+	$(SRC)/ionsec.c

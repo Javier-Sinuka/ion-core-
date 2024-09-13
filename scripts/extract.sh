@@ -68,7 +68,7 @@ SOURCES=(
 	$SOURCE_PATH/bpv7/utils/bprecvfile.c
 
 ##	$SOURCE_PATH/bpv7/library/bpsec.c
-	$SOURCE_PATH/bpv6/library/bpsec.c
+#	$SOURCE_PATH/bpv6/library/bpsec.c
 	
 ##	$SOURCE_PATH/bpv7/library/ext/bpsec/bpsec_instr.c
 	$SOURCE_PATH/bpv7/bpsec/instr/bpsec_instr.c
@@ -129,7 +129,7 @@ SOURCES=(
 	$SOURCE_PATH/ici/library/platform_sm.c
 	
 ##	$SOURCE_PATH/bpv7/library/ext/bpsec/profiles.c
-	$SOURCE_PATH/bpv6/library/ext/sbsp/profiles.c
+#	$SOURCE_PATH/bpv6/library/ext/sbsp/profiles.c
 	
 	$SOURCE_PATH/ici/library/psm.c
 	$SOURCE_PATH/ici/library/radix.c
@@ -201,7 +201,7 @@ HEADERS=(
 	$SOURCE_PATH/bpv7/library/bpP.h
 	
 ##	$SOURCE_PATH/bpv7/include/bpsec.h
-	$SOURCE_PATH/bpv6/include/bpsec.h
+#	$SOURCE_PATH/bpv6/include/bpsec.h
 
 ##	$SOURCE_PATH/bpv7/library/ext/bpsec/bpsec_instr.h
 	$SOURCE_PATH/bpv7/bpsec/instr/bpsec_instr.h
@@ -249,7 +249,7 @@ HEADERS=(
 	$SOURCE_PATH/ici/include/platform_sm.h
 	
 ##	$SOURCE_PATH/bpv7/library/ext/bpsec/profiles.h
-	$SOURCE_PATH/bpv6/library/ext/sbsp/profiles.h
+#	$SOURCE_PATH/bpv6/library/ext/sbsp/profiles.h
 	
 	$SOURCE_PATH/ici/include/psm.h
 	$SOURCE_PATH/ici/include/radix.h
@@ -294,7 +294,7 @@ HEADERS=(
 	$SOURCE_PATH/bpv7/bpsec/sci/bib_hmac_sha2_sc.h
 	$SOURCE_PATH/bpv7/bpsec/sci/bcb_aes_gcm_sc.h
 	$SOURCE_PATH/bpv7/bpsec/sci/rfc9173_utils.h
-	$SOURCE_PATH/bpv6/library/ext/sbsp/sbsp_util.h
+	#$SOURCE_PATH/bpv6/library/ext/sbsp/sbsp_util.h
 
 	$SOURCE_PATH/bpv7/stcp/stcpcla.h
 	)
