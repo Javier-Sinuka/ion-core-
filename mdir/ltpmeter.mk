@@ -1,28 +1,16 @@
+# Include ICI Source
+include $(MDIR)/libici.mk
 
-SRC_ltpmeter := \
-	$(SRC)/ltpmeter.c \
-	$(SRC)/ion.c \
-	$(SRC)/platform.c \
+# test if inclusion is successful
+ifndef LIBICI_INCLUDED
+$(error libici.mk is not found or not included, cannot build.)
+endif
+
+SRC_ltpmeter := $(SRC)/ltpmeter.c \
 	$(SRC)/libltpP.c \
-	$(SRC)/sdrxn.c \
-	$(SRC)/platform_sm.c \
 	$(SRC)/libudplsa.c \
-	$(SRC)/memmgr.c \
-	$(SRC)/psm.c \
-	$(SRC)/smrbt.c \
-	$(SRC)/smlist.c \
-	$(SRC)/sdrcatlg.c \
-	$(SRC)/sdrlist.c \
-	$(SRC)/zco.c \
-	$(SRC)/sdrmgt.c \
-	$(SRC)/rfx.c \
-	$(SRC)/sdrstring.c \
-	$(SRC)/sdrhash.c \
 	$(SRC)/ltpei.c \
-	$(SRC)/lyst.c \
-	$(SRC)/sptrace.c \
-	$(SRC)/bulk.c \
-	$(SRC)/sdrtable.c
+	$(SRC_libici)
 
 ltpmeter:
 	$(GCC) $(CFLAG) $(SRC_ltpmeter) \

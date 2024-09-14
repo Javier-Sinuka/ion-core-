@@ -1,67 +1,27 @@
+# Include ICI Source
+include $(MDIR)/libici.mk
+
+# test if inclusion is successful
+ifndef LIBICI_INCLUDED
+$(error libici.mk is not found or not included, cannot build.)
+endif
+
+# Include BP Source
+include $(MDIR)/libbp.mk
+
+# test if inclusion is successful
+ifndef LIBBP_INCLUDED
+$(error libbp.mk is not found or not included, cannot build.)
+endif
 
 SRC_ltpclo := \
 	$(SRC)/ltpclo.c \
-	$(SRC)/platform_sm.c \
-	$(SRC)/platform.c \
-	$(SRC)/ion.c \
-	$(SRC)/libbpP.c \
 	$(SRC)/libipnfw.c \
-	$(SRC)/sdrxn.c \
-	$(SRC)/sdrlist.c \
 	$(SRC)/libltp.c \
-	$(SRC)/memmgr.c \
-	$(SRC)/psm.c \
-	$(SRC)/smrbt.c \
-	$(SRC)/smlist.c \
-	$(SRC)/sdrcatlg.c \
-	$(SRC)/zco.c \
-	$(SRC)/sdrmgt.c \
-	$(SRC)/rfx.c \
-	$(SRC)/sdrstring.c \
-	$(SRC)/sdrhash.c \
-	$(SRC)/ionsec.c \
-	$(SRC)/bpsec_policy.c \
-	$(SRC)/bpsec_instr.c \
-	$(SRC)/bei.c \
-	$(SRC)/libimcfw.c \
-	$(SRC)/eureka.c \
-	$(SRC)/lyst.c \
-	$(SRC)/cbor.c \
-	$(SRC)/crc.c \
-	$(SRC)/bcb.c \
-	$(SRC)/bib.c \
-	$(SRC)/libbp.c \
-	$(SRC)/bibe.c \
-	$(SRC)/saga.c \
-	$(SRC)/sptrace.c \
 	$(SRC)/libltpP.c \
-	$(SRC)/bulk.c \
-	$(SRC)/sdrtable.c \
-	$(SRC)/radix.c \
-	$(SRC)/bpsec_policy_eventset.c \
-	$(SRC)/bpsec_policy_rule.c \
-	$(SRC)/bpsec_util.c \
-	$(SRC)/bpsec.c \
-	$(SRC)/csi.c \
-	$(SRC)/profiles.c \
 	$(SRC)/ltpei.c \
-	$(SRC)/bpsec_policy_event.c \
-	$(SRC)/pnb.c \
-	$(SRC)/bpq.c \
-	$(SRC)/meb.c \
-	$(SRC)/bae.c \
-	$(SRC)/hcb.c \
-	$(SRC)/snw.c \
-	$(SRC)/imc.c \
-	$(SRC)/bpsec_asb.c \
-	$(SRC)/sci.c \
-	$(SRC)/sc_value.c \
-	$(SRC)/sci_valmap.c \
-	$(SRC)/sc_util.c \
-	$(SRC)/ion_test_sc.c \
-	$(SRC)/bib_hmac_sha2_sc.c \
-	$(SRC)/bcb_aes_gcm_sc.c \
-	$(SRC)/rfc9173_utils.c
+	$(SRC_libici) \
+	$(SRC_libbp)
 
 ltpclo:
 	$(GCC) $(CFLAG) $(SRC_ltpclo) \
