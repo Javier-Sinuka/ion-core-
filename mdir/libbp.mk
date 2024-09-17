@@ -33,8 +33,7 @@ SRC_libbp := $(SRC)/libbp.c \
 	$(SRC)/ion_test_sc.c \
 	$(SRC)/bib_hmac_sha2_sc.c \
 	$(SRC)/bcb_aes_gcm_sc.c \
-	$(SRC)/rfc9173_utils.c \
-	$(SRC)/profiles.c \
+	$(SRC)/rfc9173_utils.c 
 
 # 9/13/2024
 # Removed following from BPv6

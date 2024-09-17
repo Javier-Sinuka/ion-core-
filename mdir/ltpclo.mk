@@ -14,12 +14,17 @@ ifndef LIBBP_INCLUDED
 $(error libbp.mk is not found or not included, cannot build.)
 endif
 
-SRC_ltpclo := \
-	$(SRC)/ltpclo.c \
+# Include LTP Source
+include $(MDIR)/libltp.mk
+
+# test if inclusion is successful
+ifndef LIBLTP_INCLUDED
+$(error libltp.mk is not found or not included, cannot build.)
+endif
+
+SRC_ltpclo := $(SRC)/ltpclo.c \
 	$(SRC)/libipnfw.c \
-	$(SRC)/libltp.c \
-	$(SRC)/libltpP.c \
-	$(SRC)/ltpei.c \
+	$(SRC_libltp) \
 	$(SRC_libici) \
 	$(SRC_libbp)
 

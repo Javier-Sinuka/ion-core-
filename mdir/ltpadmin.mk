@@ -1,28 +1,31 @@
+# Include ICI Source
+include $(MDIR)/libici.mk
 
-SRC_ltpadmin := \
-	$(SRC)/libltp.c \
-	$(SRC)/ltpei.c \
-	$(SRC)/sdrtable.c \
-	$(SRC)/sdrhash.c \
-	$(SRC)/sdrstring.c \
-	$(SRC)/libltpP.c \
-	$(SRC)/rfx.c \
-	$(SRC)/bulk.c \
-	$(SRC)/zco.c \
-	$(SRC)/sdrlist.c \
-	$(SRC)/sdrcatlg.c \
-	$(SRC)/smrbt.c \
-	$(SRC)/sdrmgt.c \
-	$(SRC)/lyst.c \
-	$(SRC)/memmgr.c \
-	$(SRC)/sptrace.c \
-	$(SRC)/psm.c \
-	$(SRC)/smlist.c \
-	$(SRC)/sdrxn.c \
-	$(SRC)/ion.c \
-	$(SRC)/platform_sm.c \
-	$(SRC)/platform.c \
-	$(SRC)/ltpadmin.c
+# test if inclusion is successful
+ifndef LIBICI_INCLUDED
+$(error libici.mk is not found or not included, cannot build.)
+endif
+
+# Include BP Source
+include $(MDIR)/libbp.mk
+
+# test if inclusion is successful
+ifndef LIBBP_INCLUDED
+$(error libbp.mk is not found or not included, cannot build.)
+endif
+
+# Include LTP Source
+include $(MDIR)/libltp.mk
+
+# test if inclusion is successful
+ifndef LIBLTP_INCLUDED
+$(error libltp.mk is not found or not included, cannot build.)
+endif
+
+SRC_ltpadmin := $(SRC)/ltpadmin.c \
+	$(SRC_libltp) \
+	$(SRC_libbp) \
+	$(SRC_libici)
 
 ltpadmin:
 	$(GCC) $(CFLAG) $(SRC_ltpadmin) \

@@ -123,6 +123,7 @@ SOURCES=(
 	$SOURCE_PATH/ltp/library/ltpei.c
 	$SOURCE_PATH/ltp/library/ext/ltpextensions.c
 	$SOURCE_PATH/ltp/daemon/ltpmeter.c
+	$SOURCE_PATH/ltp/sda/libsda.c
 	$SOURCE_PATH/ici/library/lyst.c
 	$SOURCE_PATH/ici/library/memmgr.c
 	$SOURCE_PATH/ici/library/platform.c
@@ -240,6 +241,7 @@ HEADERS=(
 	$SOURCE_PATH/bpv7/ltp/ltpcla.h
 	$SOURCE_PATH/ltp/library/ltpei.h
 	$SOURCE_PATH/ltp/include/ltp.h
+	$SOURCE_PATH/ltp/include/sda.h
 	$SOURCE_PATH/ltp/library/ltpP.h
 	$SOURCE_PATH/ici/include/lyst.h
 #	$SOURCE_PATH/ici/library/lystP.h
