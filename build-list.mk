@@ -69,13 +69,16 @@ PROGRAMS += udpcli udpclo
 PROGRAMS += ltpcli ltpclo udplsi udplso ltpclock ltpdeliv ltpmeter ltpadmin
 
 ## CFDP Class 1
-PROGRAMS += bputa cfdpclock cfdptest bpcp bpcpd cfdpadmin 
+PROGRAMS += bputa cfdpclock cfdptest cfdpadmin 
 
 # Utility Programs
 PROGRAMS += bprecvfile bpsendfile 
 PROGRAMS += bpchat 
 PROGRAMS += bpcounter bpdriver
-PROGRAMS += bplist
+PROGRAMS += bplist bpcancel
+PROGRAMS += owltsim
+# To Do: add bpcp feature for 4.1.3s
+# PROGRAMS += bpcp bpcpd
 
 #
 # PART III: PLATFORM & BP Extension

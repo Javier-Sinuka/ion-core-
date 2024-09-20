@@ -12,25 +12,6 @@ endif
 
 $(info build-list.mk has been included, proceed to build.)
 
-###########################################
-# Build a test list based on selected CLAs
-###########################################
-# Initialize TEST_LIST as empty
-TEST_LIST :=
-
-# Conditionally add to TEST_LIST based on the contents of PROGRAMS
-ifeq ($(filter stcpcli, $(PROGRAMS)), stcpcli)
-    TEST_LIST += bench-stcp
-endif
-
-ifeq ($(filter udpcli, $(PROGRAMS)), udpcli)
-    TEST_LIST += bench-udp
-endif
-
-ifeq ($(filter ltpcli, $(PROGRAMS)), ltpcli)
-    TEST_LIST += bench-ltp
-endif
-
 ###########################
 # Build Rules
 ###########################
@@ -99,9 +80,12 @@ OBJ_FILES := $(patsubst $(SRC)/%.c,$(LIB)/obj/%.o,$(ALL_SRC_FILES))
 # Ensure the obj directory exists
 _OBJ_DIR := $(shell mkdir -p $(LIB)/obj)
 
-# Specify tests based on build-list options
+# Specify test list on build-list options
+# Left side of ":" is a list of programs, joined by '+'
+# Right side of ":" is a list of tests to execute, joined by '+'
+# Each test on the right side should appear only once.
 COMBINATION_TESTS := \
-	cfdpadmin+ltpcli:bench-cfdp \
+	cfdpadmin+ltpcli+owltsim:bench-cfdp \
 	stcpcli:bench-stcp \
 	udpcli:bench-udp \
 	ltpcli:bench-ltp
@@ -133,7 +117,8 @@ clean:
 
 test:
 	@echo "Processing PROGRAMS list from $(BUILD_LIST)..."
-	@for combo in $(COMBINATION_TESTS); do \
+	@ALL_TESTS_TO_RUN=""; \
+	for combo in $(COMBINATION_TESTS); do \
 		COMB=$$(echo $$combo | cut -d':' -f1); \
 		TESTS_TO_RUN=$$(echo $$combo | cut -d':' -f2 | tr '+' ' '); \
 		COMB_FOUND=1; \
@@ -144,14 +129,18 @@ test:
 			fi; \
 		done; \
 		if [ $$COMB_FOUND -eq 1 ]; then \
-			echo "Combination found: $$COMB. Running tests: $$TESTS_TO_RUN"; \
-			for test in $$TESTS_TO_RUN; do \
-				cd $(TESTS) && ./runtests $$test; \
-			done; \
+			echo "Combination found: $$COMB. Adding tests: $$TESTS_TO_RUN"; \
+			ALL_TESTS_TO_RUN="$$ALL_TESTS_TO_RUN $$TESTS_TO_RUN"; \
 		else \
 			echo "Combination not found: $$COMB"; \
 		fi; \
-	done
+	done; \
+	if [ -n "$$ALL_TESTS_TO_RUN" ]; then \
+		echo "Running the following tests: $$ALL_TESTS_TO_RUN"; \
+		cd $(TESTS) && ./runtests $$ALL_TESTS_TO_RUN; \
+	else \
+		echo "No valid combinations found. No tests to run."; \
+	fi
 
 uninstall:
 	@rm -f $(INSTALL_PATH)/bin/*

@@ -5,6 +5,7 @@
     - [Manually get the ION Open Source Code and Build ion-core](#manually-get-the-ion-open-source-code-and-build-ion-core)
     - [Automatically get the ION Open Source Code and Build ion-core](#automatically-get-the-ion-open-source-code-and-build-ion-core)
   - [Selecting ION-core Features to Build](#selecting-ion-core-features-to-build)
+    - [Extension Blocks Build Options](#extension-blocks-build-options)
   - [Man Page Installation](#man-page-installation)
   - [Creating ION configuration (".rc") files for a two-node setup](#creating-ion-configuration-rc-files-for-a-two-node-setup)
   - [Post installation test](#post-installation-test)
@@ -63,6 +64,20 @@ You can select build for either 32-bit or 64-bit Operating Systems.
 You can also select which bundle protocol extension blocks to include for locally sourced bundles.
 
 Save the changes to the `build-list.mk`, remove the old installation by running `make clean`, `sudo make uninstall`, and then rebuild ion-core.
+
+### Extension Blocks Build Options
+
+As of ion-core 4.1.3, the `build-list.mk` file enables toggling which extension blocks will be added to locally created bundle. Here are some of the limitations:
+
+1. Support for all extension blocks types, however, remains mandatory:
+    * `PBN_EXT` : Previous Node Extension Block
+    * `BPQ_EXT` : Bundle Protocol QoS Extension Block
+    * `BAE_EXT` : Bundle Age Extension Block
+    * `SNW_EXT` : Spray and Wait Permit Extension Block
+    * `IMC_EXT` : IMC Multicast Extension Block
+2. There is not yet control available, through `build-list.mk` to set whether each locally created extension block should use CRC16, CRC32, or none applied. The default value is `noCRC` in the `./scripts/bpextension-ion-core.c`.
+3. The file `./scripts/bpextension-ion-core.c` is manually derived from the ION open-source; it is modified to support the toggling of which extension blocks to include in locally created bundle.
+4. __This is the only ION source file modified by ion-core release. This modification is manually performed by the ion-core development team right now. This file is re-evaluated for each ion-core release to make sure it is taylored for the most likely use case for users. The user of ion-core can further modify it to suite their deployment/testing needs.__
 
 ## Man Page Installation
 
