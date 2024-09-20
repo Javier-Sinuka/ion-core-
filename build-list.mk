@@ -52,6 +52,8 @@ PROGRAMS += stcpcli stcpclo
 PROGRAMS += udpcli udpclo 
 ## LTP CLA
 PROGRAMS += ltpcli ltpclo udplsi udplso ltpclock ltpdeliv ltpmeter ltpadmin
+## CFDP (list still in progress)
+PROGRAMS += cfdpadmin cfdpclock bpcp bpcpd cfdptest
 
 # Utility Programs
 PROGRAMS += bprecvfile bpsendfile 

@@ -99,6 +99,13 @@ OBJ_FILES := $(patsubst $(SRC)/%.c,$(LIB)/obj/%.o,$(ALL_SRC_FILES))
 # Ensure the obj directory exists
 _OBJ_DIR := $(shell mkdir -p $(LIB)/obj)
 
+# Specify tests based on build-list options
+COMBINATION_TESTS := \
+	cfdpadmin+ltpcli:bench-cfdp \
+	stcpcli:bench-stcp \
+	udpcli:bench-udp \
+	ltpcli:bench-ltp
+
 # Static library target
 lib: $(OBJ_FILES)
 	ar rcs $(LIB)/libioncore.a $^
@@ -125,7 +132,26 @@ clean:
 	@find $(LIB) -type f ! -name '.gitkeep' -exec rm -f {} + > /dev/null
 
 test:
-	@cd $(TESTS) && ./runtests $(TEST_LIST)
+	@echo "Processing PROGRAMS list from $(BUILD_LIST)..."
+	@for combo in $(COMBINATION_TESTS); do \
+		COMB=$$(echo $$combo | cut -d':' -f1); \
+		TESTS_TO_RUN=$$(echo $$combo | cut -d':' -f2 | tr '+' ' '); \
+		COMB_FOUND=1; \
+		for prog in $$(echo $$COMB | tr '+' ' '); do \
+			if ! echo "$(PROGRAMS)" | grep -q "$$prog"; then \
+				COMB_FOUND=0; \
+				break; \
+			fi; \
+		done; \
+		if [ $$COMB_FOUND -eq 1 ]; then \
+			echo "Combination found: $$COMB. Running tests: $$TESTS_TO_RUN"; \
+			for test in $$TESTS_TO_RUN; do \
+				cd $(TESTS) && ./runtests $$test; \
+			done; \
+		else \
+			echo "Combination not found: $$COMB"; \
+		fi; \
+	done
 
 uninstall:
 	@rm -f $(INSTALL_PATH)/bin/*

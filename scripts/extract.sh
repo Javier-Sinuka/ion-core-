@@ -359,6 +359,7 @@ TEST_DIRS=(
 	$SOURCE_PATH/demos/bench-udp
 	$SOURCE_PATH/demos/bench-ltp
 	$SOURCE_PATH/demos/bench-stcp
+	$SOURCE_PATH/demos/bench-cfdp
 )
 
 # Function to clear the content of a directory
