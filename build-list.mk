@@ -3,15 +3,16 @@
 #
 BUILD_LIST_INCLUDED = YES
 
-# 
+################## 
 # Architecture
 #
 # 64 bits (default)
 ARCH = 3
 # 32 bits
 #ARCH = 2
+##################
 
-#
+##################
 # FLAGS for Extension for Locally Sourced Bundles
 #
 # PBN_EXT : Previous Node Extension Block
@@ -19,41 +20,56 @@ ARCH = 3
 # BAE_EXT : Bundle Age Extension Block
 # SNW_EXT : Spray and Wait Permit Extension Block
 # IMC_EXT : IMC Multicast Extension Block
+
 #EXT_FLAGS = -DPNB_EXT 
 EXT_FLAGS += -DBPQ_EXT 
 #EXT_FLAGS += -DBAE_EXT 
 #EXT_FLAGS += -DSNW_EXT 
 EXT_FLAGS += -DIMC_EXT
 
+##################
+
+##################
+# PART I: Mandatory Functions (do not edit)
 #
-# PART I: Mandatory Features (do not edit)
-#
-# ICI
+
+## ICI
 PROGRAMS := ionadmin ionwarn rfxclock ionrestart 
-# BPv7
+
+## BPv7
 PROGRAMS += bpadmin bpclm bpclock bptransit ipnadmin ipnadminep ipnfw
-# Utility Programs
+
+## Utility Programs
 PROGRAMS += bpsink bpsource bpecho bping bpstats bptrace 
 
-#
+##################
+
+##################
 # PART II: Optional Feature List
 #
 # This list can be modified. At least one CLA must be included.
-# ICI
+
+## ICI utilities
 PROGRAMS += psmwatch sdrwatch 
-## BPv7
+
+## BPv7 utilities
 PROGRAMS += bpversion 
+
 ## Load-and-Go Command
 PROGRAMS += lgagent lgsend
-# CLA: must include at least one of STCP, UDP, or LTP
-## STCP CLA
+
+## CLA: must include at least one of STCP, UDP, or LTP
+### STCP CLA
 PROGRAMS += stcpcli stcpclo 
-## UDP CLA
+
+### UDP CLA
 PROGRAMS += udpcli udpclo 
-## LTP CLA
+
+### LTP CLA
 PROGRAMS += ltpcli ltpclo udplsi udplso ltpclock ltpdeliv ltpmeter ltpadmin
-## CFDP (list still in progress)
-PROGRAMS += cfdpadmin cfdpclock bpcp bpcpd cfdptest
+
+## CFDP Class 1
+PROGRAMS += bputa cfdpclock cfdptest bpcp bpcpd cfdpadmin 
 
 # Utility Programs
 PROGRAMS += bprecvfile bpsendfile 

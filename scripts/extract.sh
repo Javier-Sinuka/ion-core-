@@ -66,10 +66,9 @@ SOURCES=(
 	$SOURCE_PATH/bpv7/daemon/bpclm.c
 	$SOURCE_PATH/bpv7/daemon/bpclock.c
 	$SOURCE_PATH/bpv7/utils/bprecvfile.c
-
 ##	$SOURCE_PATH/bpv7/library/bpsec.c
 #	$SOURCE_PATH/bpv6/library/bpsec.c
-	
+
 ##	$SOURCE_PATH/bpv7/library/ext/bpsec/bpsec_instr.c
 	$SOURCE_PATH/bpv7/bpsec/instr/bpsec_instr.c
 
@@ -110,6 +109,12 @@ SOURCES=(
 	$SOURCE_PATH/cfdp/library/libcfdp.c
 	$SOURCE_PATH/cfdp/library/libcfdpops.c
 	$SOURCE_PATH/cfdp/library/libcfdpP.c
+	$SOURCE_PATH/cfdp/bp/bputa.c
+	$SOURCE_PATH/cfdp/daemon/cfdpclock.c
+	$SOURCE_PATH/cfdp/test/cfdptest.c
+	$SOURCE_PATH/cfdp/utils/bpcp.c
+	$SOURCE_PATH/cfdp/utils/bpcpd.c
+	$SOURCE_PATH/cfdp/utils/cfdpadmin.c
 	$SOURCE_PATH/bpv7/cgr/libcgr.c
 	$SOURCE_PATH/bpv7/imc/libimcfw.c
 	$SOURCE_PATH/ltp/library/libltp.c
@@ -227,6 +232,8 @@ HEADERS=(
 	$SOURCE_PATH/cfdp/include/cfdp.h
 	$SOURCE_PATH/cfdp/include/cfdpops.h
 	$SOURCE_PATH/cfdp/library/cfdpP.h
+	$SOURCE_PATH/cfdp/include/bputa.h
+	$SOURCE_PATH/cfdp/utils/bpcp.h
 	$SOURCE_PATH/bpv7/library/cgr.h
 	$SOURCE_PATH/ici/include/crc.h
 	$SOURCE_PATH/ici/include/crypto.h
@@ -346,6 +353,14 @@ MANPAGE=(
 	$SOURCE_PATH/bpv7/doc/pod1/bpchat.pod
 	$SOURCE_PATH/bpv7/doc/pod1/stcpcli.pod
 	$SOURCE_PATH/bpv7/doc/pod1/stcpclo.pod
+	$SOURCE_PATH/cfdp/doc/pod1/bpcp.pod
+	$SOURCE_PATH/cfdp/doc/pod1/bpcpd.pod
+	$SOURCE_PATH/cfdp/doc/pod1/bputa.pod
+	$SOURCE_PATH/cfdp/doc/pod1/cfdpadmin.pod
+	$SOURCE_PATH/cfdp/doc/pod1/cfdpclock.pod
+	$SOURCE_PATH/cfdp/doc/pod1/cfdptest.pod
+	$SOURCE_PATH/cfdp/doc/pod3/cfdp.pod
+	$SOURCE_PATH/cfdp/doc/pod5/cfdprc.pod
 	)
 
 TEST_SCRIPTS=(
