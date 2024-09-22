@@ -144,7 +144,7 @@ test:
 
 uninstall:
 	@rm -f $(INSTALL_PATH)/bin/*
-	@rm -f $(INSTALL_PATH)/man/*
+	@find $(INSTALL_PATH)/man/* ! -name ".gitkeep" -exec rm -rf {} +
 
 ## Clean up all build artifacts + all source files extracted from ION open source code
 distclean:
