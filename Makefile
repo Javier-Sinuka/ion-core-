@@ -40,45 +40,18 @@ LIB = $(PWD)/lib
 
 export CFLAG = -g -Wall -DSPACE_ORDER=${ARCH} -DBP_EXTENDED ${EXT_FLAGS} -lm -pthread
 export PLATFORM = -lm -pthread
+export SHARED_FLAG = -fPIC
 export GCC = /usr/bin/gcc
 
 # Just locally:
 MAKE = /usr/bin/make -f
 
-# Collect all source files from SRC_{PROGRAM} variables defined in .mk files
-ALL_SRC_FILES := $(sort $(foreach prog,$(PROGRAMS),$(SRC_$(prog))))
-
-# Convert source file paths to object file paths
-OBJ_FILES := $(patsubst $(SRC)/%.c,$(LIB)/obj/%.o,$(ALL_SRC_FILES))
-
-# Ensure the obj directory exists
-_OBJ_DIR := $(shell mkdir -p $(LIB)/obj)
-
-################################
-# Define build targets
-################################
-.PHONY: all $(PROGRAMS) clean distclean install man uninstall
-
-# Default target to build selected programs
-all: $(PROGRAMS)
-
-# Construct .mk file paths
-MK_FILES := $(addprefix $(MDIR)/,$(addsuffix .mk,$(PROGRAMS)))
-
-# Include.mk files
-include $(MK_FILES)
-
-# After inclusion of all .mk files, the SRC_{PROGRAM} variables are now 
-# visible to the rest of the Makefile.
-
-# Collect all source files from SRC_{PROGRAM} variables defined in .mk files
-ALL_SRC_FILES := $(sort $(foreach prog,$(PROGRAMS),$(SRC_$(prog))))
-
-# Convert source file paths to object file paths
-OBJ_FILES := $(patsubst $(SRC)/%.c,$(LIB)/obj/%.o,$(ALL_SRC_FILES))
-
-# Ensure the obj directory exists
-_OBJ_DIR := $(shell mkdir -p $(LIB)/obj)
+##########################
+# List of Files
+##########################
+# Ensure the obj directories exist
+_STATIC_OBJ_DIR := $(shell mkdir -p $(LIB)/obj/static)
+_SHARED_OBJ_DIR := $(shell mkdir -p $(LIB)/obj/shared)
 
 # Specify test list on build-list options
 # Left side of ":" is a list of programs, joined by '+'
@@ -90,22 +63,78 @@ COMBINATION_TESTS := \
 	udpcli:bench-udp \
 	ltpcli:bench-ltp
 
-# Static library target
-lib: $(OBJ_FILES)
-	ar rcs $(LIB)/libioncore.a $^
+################################
+# Define build targets
+################################
+.PHONY: all $(PROGRAMS) clean distclean install man uninstall static shared
+
+# Default target to build selected programs
+all: $(PROGRAMS)
+
+# Construct .mk file paths
+MK_FILES := $(addprefix $(MDIR)/,$(addsuffix .mk,$(PROGRAMS)))
+
+# Include all .mk files
+include $(MK_FILES)
+
+# Object files for static libraries
+STATIC_ICI_OBJ_FILES := $(patsubst $(SRC)/%.c,$(LIB)/obj/static/%.o,$(SRC_libici))
+STATIC_BP_OBJ_FILES := $(patsubst $(SRC)/%.c,$(LIB)/obj/static/%.o,$(SRC_libbp))
+STATIC_LTP_OBJ_FILES := $(patsubst $(SRC)/%.c,$(LIB)/obj/static/%.o,$(SRC_libltp))
+STATIC_CFDP_OBJ_FILES := $(patsubst $(SRC)/%.c,$(LIB)/obj/static/%.o,$(SRC_libcfdp))
+
+# Object files for dynamic libraries
+SHARED_ICI_OBJ_FILES := $(patsubst $(SRC)/%.c,$(LIB)/obj/shared/%.o,$(SRC_libici))
+SHARED_BP_OBJ_FILES := $(patsubst $(SRC)/%.c,$(LIB)/obj/shared/%.o,$(SRC_libbp))
+SHARED_LTP_OBJ_FILES := $(patsubst $(SRC)/%.c,$(LIB)/obj/shared/%.o,$(SRC_libltp))
+SHARED_CFDP_OBJ_FILES := $(patsubst $(SRC)/%.c,$(LIB)/obj/shared/%.o,$(SRC_libcfdp))
+
+# static library targets
+static: staticlibici staticlibbp staticlibltp staticlibcfdp
+
+staticlibici: $(STATIC_ICI_OBJ_FILES)
+	ar rcs $(LIB)/libicicore.a $^
+
+staticlibbp: $(STATIC_BP_OBJ_FILES)
+	ar rcs $(LIB)/libbpcore.a $^
+
+staticlibltp: $(STATIC_LTP_OBJ_FILES)
+	ar rcs $(LIB)/libltpcore.a $^
+
+staticlibcfdp: $(STATIC_CFDP_OBJ_FILES)
+	ar rcs $(LIB)/libcfdpcore.a $^
 
 # Object files compile rule for static library #
-# *** Remember to check if there are different flags for different programs. ***
-# *** This rule here assumes they are all the same, which is true for 4.1.2. ***
-$(LIB)/obj/%.o: $(SRC)/%.c
+$(LIB)/obj/static/%.o: $(SRC)/%.c
 	$(GCC) $(CFLAG) -I$(INC) -c $< $(PLATFORM) -o $@
-				
+
+# dynamic/shared library targets
+shared: $(LIB)/libicicore.so $(LIB)/libbpcore.so $(LIB)/libltpcore.so $(LIB)/libcfdpcore.so
+
+$(LIB)/libicicore.so: $(SHARED_ICI_OBJ_FILES)
+	$(CC) -shared -o $(LIB)/libicicore.so $(SHARED_ICI_OBJ_FILES)
+
+$(LIB)/libbpcore.so: $(SHARED_BP_OBJ_FILES)
+	$(CC) -shared -o $(LIB)/libbpcore.so $(SHARED_BP_OBJ_FILES)
+
+$(LIB)/libltpcore.so: $(SHARED_LTP_OBJ_FILES)
+	$(CC) -shared -o $(LIB)/libltpcore.so $(SHARED_LTP_OBJ_FILES)
+
+$(LIB)/libcfdpcore.so: $(SHARED_CFDP_OBJ_FILES)
+	$(CC) -shared -o $(LIB)/libcfdpcore.so $(SHARED_CFDP_OBJ_FILES)
+
+# Object files compile rule for shared library #
+$(LIB)/obj/shared/%.o: $(SRC)/%.c
+	$(GCC) $(CFLAG) -I$(INC) -c $< $(PLATFORM) $(SHARED_FLAG) -o $@
+
 install:
 	cp -v $(OUT_BIN)/* $(INSTALL_PATH)/bin
 	cp -v $(OUT_BIN)/ionstart $(INSTALL_PATH)/bin
 	cp -v $(OUT_BIN)/ionstart.awk $(INSTALL_PATH)/bin
 	cp -v $(OUT_BIN)/ionstop $(INSTALL_PATH)/bin
 	cp -v $(OUT_BIN)/killm $(INSTALL_PATH)/bin
+	cp -v $(LIB)/*.a $(INSTALL_PATH)/lib
+	cp -v $(LIB)/*.so $(INSTALL_PATH)/lib
 
 man:
 	./scripts/make-man-pages.sh $(SRC) "$(PROGRAMS)"
@@ -145,6 +174,8 @@ test:
 uninstall:
 	@rm -f $(INSTALL_PATH)/bin/*
 	@find $(INSTALL_PATH)/man/* ! -name ".gitkeep" -exec rm -rf {} +
+	@rm -f $(INSTALL_PATH)/lib/*core.a
+	@rm -f $(INSTALL_PATH)/lib/*core.so
 
 ## Clean up all build artifacts + all source files extracted from ION open source code
 distclean:
@@ -154,13 +185,4 @@ distclean:
 	@find $(OUT_BIN) -mindepth 1 ! -name '.gitkeep' -exec rm -rf {} + > /dev/null
 	@find $(MAN) -mindepth 1 ! -name '.gitkeep' -exec rm -rf {} + > /dev/null
 	@find $(TESTS) -mindepth 1 ! -name '.gitkeep' -exec rm -rf {} + > /dev/null
-	@rm system_up > /dev/null
-
-
-
-
-
-
-
-
-
+	@rm -f system_up > /dev/null
