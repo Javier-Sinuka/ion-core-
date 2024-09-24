@@ -37,6 +37,7 @@ LIB = $(PWD)/lib
 # SPACE_ORDER of 3 specifies 64 bit systems.
 # SPACE_ORDER of 2 specifies 32 bit systems.
 # BP_EXTENDED is required enables extension blocks required for QoS.
+# EXT_FLAGS is a list of individual extension blocks for locally sourced bundles
 
 export CFLAG = -g -Wall -DSPACE_ORDER=${ARCH} -DBP_EXTENDED ${EXT_FLAGS} -lm -pthread
 export PLATFORM = -lm -pthread
@@ -138,7 +139,7 @@ install:
 
 man:
 	./scripts/make-man-pages.sh $(SRC) "$(PROGRAMS)"
-	cp -v $(MAN)/* $(INSTALL_PATH)/man || true
+	cp -v $(MAN)/* $(INSTALL_PATH)/share/man/man1 || true
 
 clean:
 	@find $(OUT_BIN) -type f ! -name '.gitkeep' ! -name 'ionstart' ! -name 'ionstart.awk' ! -name 'ionstop' ! -name 'killm' -exec rm -f {} + > /dev/null
@@ -172,8 +173,10 @@ test:
 	fi
 
 uninstall:
-	@rm -f $(INSTALL_PATH)/bin/*
-	@find $(INSTALL_PATH)/man/* ! -name ".gitkeep" -exec rm -rf {} +
+	@for prog in $(PROGRAMS); do \
+	    rm -f $(INSTALL_PATH)/bin/$$prog; \
+		rm -f $(INSTALL_PATH)/share/man/man1/$$prog*; \
+	done
 	@rm -f $(INSTALL_PATH)/lib/*core.a
 	@rm -f $(INSTALL_PATH)/lib/*core.so
 

@@ -245,12 +245,16 @@ https://github.com/sakai135/wsl-vpnkit
 
 Latest Release
 
-#### Tag(to be added): `4.1.3`
+#### Tag: `4.1.3`
 
-9/10/2024
+9/24/2024
 * Update codebase to ION open source verion 4.1.3
 * Add regression test for each available CLA
+* Add target to build static and shared libraries
 
+#### Tag: `4.1.2b`
+
+Added ability to select/exclude certain features from build
 
 #### Tag: `4.1.2a`
 
