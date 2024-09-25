@@ -1,7 +1,6 @@
 ## Notes to developers:
 
-August 1, 2023
-
+* Ion-core assumes the typical Linux OS installation location for `make` and `gcc`. It has not been tested for FreeBSD and MacOS. Future releases will update and test on these platforms.
 * Each ion-core version is designed to work with the corresponding version of ION Open Source release, e.g., ion-core 4.1.2 uses the ION open-source release version 4.1.2 as its sources.
 * The mainline of the ion-core is the `current` branch. Each release will be tagged by the release number in the format of <x.y.z>.
 * The `nasa-jpl/ion-core` repo is a mirror of an internal repo used by NASA team for development and testing. You may submit pull requests through Github and it will reviewed by ION development team for inclusion into the baseline. If incorporated, your changes will be mirrored back out on the next official release of ion-core.

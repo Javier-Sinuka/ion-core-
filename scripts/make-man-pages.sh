@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 SOURCE_PATH="$1"
 PROGRAMS="$2"
 

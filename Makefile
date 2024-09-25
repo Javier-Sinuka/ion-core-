@@ -134,8 +134,10 @@ install:
 	cp -v $(OUT_BIN)/ionstart.awk $(INSTALL_PATH)/bin
 	cp -v $(OUT_BIN)/ionstop $(INSTALL_PATH)/bin
 	cp -v $(OUT_BIN)/killm $(INSTALL_PATH)/bin
-	cp -v $(LIB)/*.a $(INSTALL_PATH)/lib
-	cp -v $(LIB)/*.so $(INSTALL_PATH)/lib
+
+install-lib:
+	@find $(LIB) -maxdepth 1 -name "*.a" -exec cp -v {} $(INSTALL_PATH)/lib \; || true
+	@find $(LIB) -maxdepth 1 -name "*.so" -exec cp -v {} $(INSTALL_PATH)/lib \; || true
 
 man:
 	./scripts/make-man-pages.sh $(SRC) "$(PROGRAMS)"
@@ -177,6 +179,8 @@ uninstall:
 	    rm -f $(INSTALL_PATH)/bin/$$prog; \
 		rm -f $(INSTALL_PATH)/share/man/man1/$$prog*; \
 	done
+
+uninstall-lib:
 	@rm -f $(INSTALL_PATH)/lib/*core.a
 	@rm -f $(INSTALL_PATH)/lib/*core.so
 
