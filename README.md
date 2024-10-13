@@ -2,8 +2,7 @@
 
 - [ION-Core for Linux (and WSL)](#ion-core-for-linux-and-wsl)
   - [Build \& Install](#build--install)
-    - [Manually get the ION Open Source Code and Build ion-core](#manually-get-the-ion-open-source-code-and-build-ion-core)
-    - [Automatically get the ION Open Source Code and Build ion-core](#automatically-get-the-ion-open-source-code-and-build-ion-core)
+    - [Alternative: Automated download of ION Open Source Code _without commit history_](#alternative-automated-download-of-ion-open-source-code-without-commit-history)
   - [Selecting ION-core Features to Build](#selecting-ion-core-features-to-build)
     - [Extension Blocks Build Options](#extension-blocks-build-options)
   - [Man Page Installation](#man-page-installation)
@@ -17,7 +16,8 @@
   - [Contributing Code](#contributing-code)
   - [WSL2 Networking Issue](#wsl2-networking-issue)
   - [Release Notes](#release-notes)
-      - [Tag(to be added): `4.1.3`](#tagto-be-added-413)
+      - [Tag: `4.1.3`](#tag-413)
+      - [Tag: `4.1.2b`](#tag-412b)
       - [Tag: `4.1.2a`](#tag-412a)
       - [Tag: `4.1.2`](#tag-412)
 
@@ -29,29 +29,33 @@ sudo apt update
 sudo apt install make gcc
 ```
 
-### Manually get the ION Open Source Code and Build ion-core
-
-Get the ION Open Source Code:
+Clone the ION open source code repo:
 ```bash
-wget https://github.com/nasa-jpl/ION-DTN/archive/refs/tags/ion-open-source-4.1.3.tar.gz
-tar -zxvf ion-open-source-4.1.3.tar.gz
+cd <ion-source-codee-folder>
+git clone https://github.com/nasa-jpl/ION-DTN.git
 ```
 
-Get the ION-Core Repo, Extract Source File, Build and Install
+Get ion-core and build:
 ```bash
 git clone https://github.com/nasa-jpl/ion-core.git
 cd ion-core
 git checkout tags/4.1.3
-./scripts/extract.sh ../ion-open-source-4.1.3
+# clean out previous build
+make clean
+sudo make uninstall
+# build
+./scripts/extract.sh <your-ion-source-code-folder>/ion-open-source-4.1.3
 make
 sudo make install
 ```
 
-### Automatically get the ION Open Source Code and Build ion-core
+### Alternative: Automated download of ION Open Source Code _without commit history_
 
-You can also run `./scripts/extract.sh` without supplying the path to an existing ION source code folder. In that case, the script will automatically download the appropriate ION open source code into a `tmp` directory and extract the needed files into ion-core.
+You can run `./scripts/extract.sh` without supplying the path to an existing ION source code repo. In that case, the script will automatically download the appropriate ION open source code into a `tmp` directory.
 
-Then run `make` and `sudo make install`.
+Then you can run `make` and `sudo make install` to install the code.
+
+The disadvantage of this approach is that you will not have the commit history of the ION open source code and not way to submit pull requests to the original ION open source code. This is provided as a convenience for conducting quick testing.
 
 ## Selecting ION-core Features to Build
 

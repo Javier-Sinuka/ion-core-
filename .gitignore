@@ -10,3 +10,4 @@ ion.log
 .gitkeep
 system_up
 tests/*
+.vscode/settings.json

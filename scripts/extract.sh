@@ -30,8 +30,7 @@ cd "$SCRIPT_DIR/.."
 
 # Set the default source
 ION_VER="4.1.3"
-ION_SRC_URL=https://github.com/nasa-jpl/ION-DTN/archive/refs/tags/ion-open-source-$ION_VER.tar.gz
-#ION_SRC_URL="https://sourceforge.net/projects/ion-dtn/files/ion-open-source-$ION_VER.tar.gz"
+ION_SRC_ZIP=https://github.com/nasa-jpl/ION-DTN/archive/refs/tags/ion-open-source-$ION_VER.tar.gz
 SOURCE_PATH=$1
 
 if [[ -z "$1" ]]; then
@@ -41,13 +40,22 @@ if [[ -z "$1" ]]; then
   mkdir -p "$SOURCE_PATH"
   echo "No source path specified. ION $ION_VER will be downloaded to location: $SOURCE_PATH"
   # Use wget to download the file
-  if wget "$ION_SRC_URL"; then
+  if wget "$ION_SRC_ZIP"; then
 	  tar -xzf ion-open-source-$ION_VER.tar.gz -C "$SOURCE_PATH" --strip-components 1
 	  rm ion-open-source-$ION_VER.tar.gz
       echo "Download and extraction successful."
   else
       echo "Download failed."
       exit 1
+  fi
+else
+  # Use the provided source path
+  SOURCE_PATH=$1
+  echo "Using provided source path: $SOURCE_PATH"
+  # Check if the source path exists
+  if [[ ! -d "$SOURCE_PATH" ]]; then
+  	echo "Source path does not exist. Please provide a valid source path."
+	exit 1
   fi
 fi
 
@@ -367,8 +375,8 @@ echo "Extracting source .c files from $SOURCE_PATH to $SRC"
 count=0
 while [ "x${SOURCES[count]}" != "x" ]
 	do
-		if cp "${SOURCES[count]}" $SRC
-		then echo found "${SOURCES[count]}"
+		if ln -s "${SOURCES[count]}" $SRC
+		then echo linked "${SOURCES[count]}"
 			else echo ERROR: "${SOURCES[count]}" is missing or has moved. Aborting.
 			break
 		fi
@@ -380,8 +388,8 @@ echo "Extracting header .h files from $SOURCE_PATH to $INC"
 count=0
 while [ "x${HEADERS[count]}" != "x" ]
 	do
-		if cp "${HEADERS[count]}" $INC
-		then echo found "${HEADERS[count]}"
+		if ln -s "${HEADERS[count]}" $INC
+		then echo linked "${HEADERS[count]}"
 			else echo ERROR: "${HEADERS[count]}" is missing or has moved. Aborting.
 			break
 		fi
@@ -394,8 +402,8 @@ echo "Extracting ION scripts from $SOURCE_PATH to $OUT_BIN"
 count=0
 while [ "x${SCRIPTS[count]}" != "x" ]
 	do
-		if cp "${SCRIPTS[count]}" $OUT_BIN
-		then echo found "${SCRIPTS[count]}"
+		if ln -s "${SCRIPTS[count]}" $OUT_BIN
+		then echo linked "${SCRIPTS[count]}"
 			else echo ERROR: "${SCRIPTS[count]}" is missing or has moved. Aborting.
 			break
 		fi
@@ -409,8 +417,8 @@ mkdir -p "$SRC/$MAN"
 count=0
 while [ "x${MANPAGE[count]}" != "x" ]
 	do
-		if cp "${MANPAGE[count]}" $SRC/$MAN/
-		then echo found "${MANPAGE[count]}"
+		if ln -s "${MANPAGE[count]}" $SRC/$MAN/
+		then echo linked "${MANPAGE[count]}"
 			else echo ERROR: "${MANPAGE[count]}" is missing or has moved. Aborting.
 			break
 		fi
@@ -422,8 +430,8 @@ echo "Extracting test scripts from $SOURCE_PATH to $TESTS"
 count=0
 while [ "x${TEST_SCRIPTS[count]}" != "x" ]
 	do
-		if cp "${TEST_SCRIPTS[count]}" $TESTS
-		then echo found "${TEST_SCRIPTS[count]}"
+		if ln -s "${TEST_SCRIPTS[count]}" $TESTS
+		then echo linked "${TEST_SCRIPTS[count]}"
 			else echo ERROR: "${TEST_SCRIPTS[count]}" is missing or has moved. Aborting.
 			break
 		fi
@@ -432,37 +440,26 @@ done
 
 # Move testing script 'system_up' 
 echo "Place 'system_up' script in root directory"
-cp $TESTS/system_up $TESTS/.. 
+ln -s $TESTS/system_up $TESTS/.. 
 
 # Extract Test Set
 echo "Extracting test sets from $SOURCE_PATH to $TESTS"
 count=0
 while [ "x${TEST_DIRS[count]}" != "x" ]
 	do
-		if cp -r "${TEST_DIRS[count]}" $TESTS
-		then echo found "${TEST_DIRS[count]}"
+		if ln -s "${TEST_DIRS[count]}" $TESTS
+		then echo linked "${TEST_DIRS[count]}"
 			else echo ERROR: "${TEST_DIRS[count]}" is missing or has moved. Aborting.
 			break
 		fi
 	count=$(( $count + 1 ))
 done
 
-# Copy modified ION-core version of bpextension.c to /src
+#
+# Copy modified ION-core version of bpextension.c to original source code
 # Modified bpextension.c support custom build options in build-list.mk
 echo "Replacing bpextension with customized ion-core version in ./scripts"
-cp $SCRIPT_DIR/bpextensions-ion-core.c ./$INC/bpextensions.c
-
-# Clean up the inc/noextensions.c file here.
-# The compiler produces "warning: excess elements in scalar initializer"
-# This is because of the static type for the arrays:
-# extensionDefs[]
-# extensionSpecs[]
-
-# This uses clean_noex.txt which contains some corrected code.
-# Since I can't touch the upstream code on Sourceforge; I gotta do it this way for now.
-##cd scripts
-##./clean_noex.sh
-##cd ..
+cp --remove-destination $SCRIPT_DIR/bpextensions-ion-core.c ./$INC/bpextensions.c
 
 # Relative path in #include:
 echo "Updating path to header file bpsecadmin_config.h in file bpsec_policy_rule.c"
