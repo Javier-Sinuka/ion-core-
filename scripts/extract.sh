@@ -25,46 +25,67 @@ fi
 # Get the full path of the script's directory
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
 
+# Get the root directory of ion-core
+ROOT_DIR=$(realpath "$SCRIPT_DIR/..")
+
 # change to the script's parent directory
-cd "$SCRIPT_DIR/.."
+cd "$ROOT_DIR"
 
 # Set the default source
 ION_VER="4.1.3"
 ION_SRC_ZIP=https://github.com/nasa-jpl/ION-DTN/archive/refs/tags/ion-open-source-$ION_VER.tar.gz
-SOURCE_PATH=$1
 
+# Check if a source path was provided
+
+# if not, use the tmp under ion-core
 if [[ -z "$1" ]]; then
-  # set default source path and clear it
-  SOURCE_PATH="./tmp/ion-open-source-$ION_VER"
-  rm -rf "$SOURCE_PATH"
-  mkdir -p "$SOURCE_PATH"
-  echo "No source path specified. ION $ION_VER will be downloaded to location: $SOURCE_PATH"
-  # Use wget to download the file
-  if wget "$ION_SRC_ZIP"; then
-	  tar -xzf ion-open-source-$ION_VER.tar.gz -C "$SOURCE_PATH" --strip-components 1
-	  rm ion-open-source-$ION_VER.tar.gz
-      echo "Download and extraction successful."
-  else
-      echo "Download failed."
-      exit 1
-  fi
+	# set default source path and clear it
+	SOURCE_PATH="$ROOT_DIR/tmp/ion-open-source-$ION_VER"
+	rm -rf "$SOURCE_PATH"
+	mkdir -p "$SOURCE_PATH"
+	echo "No source path specified. ION $ION_VER will be downloaded to location: $SOURCE_PATH"
+	# Use wget to download the file
+	if wget "$ION_SRC_ZIP"; then
+		tar -xzf ion-open-source-$ION_VER.tar.gz -C "$SOURCE_PATH" --strip-components 1
+		rm ion-open-source-$ION_VER.tar.gz
+		echo "Download and extraction successful."
+	else
+		echo "Download failed."
+		exit 1
+	fi
 else
-  # Use the provided source path
-  SOURCE_PATH=$1
-  echo "Using provided source path: $SOURCE_PATH"
-  # Check if the source path exists
-  if [[ ! -d "$SOURCE_PATH" ]]; then
-  	echo "Source path does not exist. Please provide a valid source path."
-	exit 1
-  fi
+	# Use the provided source path
+
+	# Determine the full path to source code
+	# Check if the path is relative or absolute
+		if [[ "$1" = /* ]]; then
+			# It's already an absolute path
+			SOURCE_PATH="$1"
+		else
+			# It's a relative path, prepend the current working directory
+			SOURCE_PATH="$(pwd)/$1"
+		fi
+
+	# Normalize the path to remove any redundant components like ../ or ./
+	SOURCE_PATH=$(cd "$(dirname "$SOURCE_PATH")" && pwd)/$(basename "$SOURCE_PATH")
+	
+	echo "Using provided source path: $SOURCE_PATH"
+
+	# Check if the source path exists
+	if [[ ! -d "$SOURCE_PATH" ]]; then
+		echo "Source path does not exist. Please provide a valid source path."
+		exit 1
+	fi
 fi
 
-SRC=src
-INC=inc
-OUT_BIN=bin
-MAN=man
-TESTS=tests
+# Set the output directories
+SRC="$ROOT_DIR/src"
+INC="$ROOT_DIR/inc"
+OUT_BIN="$ROOT_DIR/bin"
+MAN="$ROOT_DIR/man"
+TESTS="$ROOT_DIR/tests"
 
+# List of source files to link
 SOURCES=(
 # BPv7
 	$SOURCE_PATH/bpv7/bibe/bibe.c
@@ -81,7 +102,6 @@ SOURCES=(
 	$SOURCE_PATH/bpv7/bpsec/sci/sc_value.c
 	$SOURCE_PATH/bpv7/bpsec/sci/sci_valmap.c
 	$SOURCE_PATH/bpv7/bpsec/sci/sci.c
-	$SOURCE_PATH/bpv7/bpsec/utils/bpsec_asb.c
 	$SOURCE_PATH/bpv7/bpsec/utils/bpsec_asb.c
 	$SOURCE_PATH/bpv7/bpsec/utils/bpsec_util.c
 	$SOURCE_PATH/bpv7/cgr/libcgr.c
@@ -374,96 +394,191 @@ clear_directory "$TESTS"
 echo "Extracting source .c files from $SOURCE_PATH to $SRC"
 count=0
 while [ "x${SOURCES[count]}" != "x" ]
-	do
-		if ln -s "${SOURCES[count]}" $SRC
-		then echo linked "${SOURCES[count]}"
-			else echo ERROR: "${SOURCES[count]}" is missing or has moved. Aborting.
-			break
-		fi
-	count=$(( $count + 1 ))
+do
+    # Get the target source file path
+    target="${SOURCES[count]}"
+    
+    # Extract the filename from the full path
+    filename=$(basename "$target")
+    
+    # Destination path
+    destination="$SRC/$filename"
+    
+    # Create symbolic link in the src directory
+    if ln -s "$target" "$destination"
+    then
+        echo "Linked $target to $destination"
+    else
+        echo "ERROR: $target is missing or has moved. Aborting."
+        exit 1
+    fi
+    
+    count=$((count + 1))
 done
 
 # Extract .h files
 echo "Extracting header .h files from $SOURCE_PATH to $INC"
 count=0
 while [ "x${HEADERS[count]}" != "x" ]
-	do
-		if ln -s "${HEADERS[count]}" $INC
-		then echo linked "${HEADERS[count]}"
-			else echo ERROR: "${HEADERS[count]}" is missing or has moved. Aborting.
-			break
-		fi
-	count=$(( $count + 1 ))
-
+do
+    # Get the target header file path
+    target="${HEADERS[count]}"
+    
+    # Extract the filename from the full path
+    filename=$(basename "$target")
+    
+    # Destination path in $INC
+    destination="$INC/$filename"
+    
+    # Create symbolic link in the INC directory
+    if ln -s "$target" "$destination"
+    then
+        echo "Linked $target to $destination"
+    else
+        echo "ERROR: $target is missing or has moved. Aborting."
+        exit 1
+    fi
+    
+    count=$((count + 1))
 done
 
 # Extract ION scripts
 echo "Extracting ION scripts from $SOURCE_PATH to $OUT_BIN"
 count=0
 while [ "x${SCRIPTS[count]}" != "x" ]
-	do
-		if ln -s "${SCRIPTS[count]}" $OUT_BIN
-		then echo linked "${SCRIPTS[count]}"
-			else echo ERROR: "${SCRIPTS[count]}" is missing or has moved. Aborting.
-			break
-		fi
-	count=$(( $count + 1 ))
+do
+    # Get the target script file path
+    target="${SCRIPTS[count]}"
+    
+    # Extract the filename from the full path
+    filename=$(basename "$target")
+    
+    # Destination path in $OUT_BIN
+    destination="$OUT_BIN/$filename"
+    
+    # Create symbolic link in the OUT_BIN directory
+    if ln -s "$target" "$destination"
+    then
+        echo "Linked $target to $destination"
+    else
+        echo "ERROR: $target is missing or has moved. Aborting."
+        exit 1
+    fi
+    
+    count=$((count + 1))
 done
+
 
 # Extract man page .pod files
 echo "Extracting man page .pod files from $SOURCE_PATH to $SRC/$MAN"
+
 # Create the directory, if it doesn't exist.
 mkdir -p "$SRC/$MAN"
+
 count=0
 while [ "x${MANPAGE[count]}" != "x" ]
-	do
-		if ln -s "${MANPAGE[count]}" $SRC/$MAN/
-		then echo linked "${MANPAGE[count]}"
-			else echo ERROR: "${MANPAGE[count]}" is missing or has moved. Aborting.
-			break
-		fi
-	count=$(( $count + 1 ))
+do
+    # Get the target man page file path
+    target="${MANPAGE[count]}"
+    
+    # Extract the filename from the full path
+    filename=$(basename "$target")
+    
+    # Destination path in $SRC/$MAN
+    destination="$SRC/$MAN/$filename"
+    
+    # Create symbolic link in the MAN directory
+    if ln -s "$target" "$destination"
+    then
+        echo "Linked $target to $destination"
+    else
+        echo "ERROR: $target is missing or has moved. Aborting."
+        exit 1
+    fi
+    
+    count=$((count + 1))
 done
+
 
 # Extract regression test scripts
 echo "Extracting test scripts from $SOURCE_PATH to $TESTS"
 count=0
 while [ "x${TEST_SCRIPTS[count]}" != "x" ]
-	do
-		if ln -s "${TEST_SCRIPTS[count]}" $TESTS
-		then echo linked "${TEST_SCRIPTS[count]}"
-			else echo ERROR: "${TEST_SCRIPTS[count]}" is missing or has moved. Aborting.
-			break
-		fi
-	count=$(( $count + 1 ))
+do
+    # Get the target test script file path
+    target="${TEST_SCRIPTS[count]}"
+    
+    # Extract the filename from the full path
+    filename=$(basename "$target")
+    
+    # Destination path in $TESTS
+    destination="$TESTS/$filename"
+    
+    # Create symbolic link in the TESTS directory
+    if ln -s "$target" "$destination"
+    then
+        echo "Linked $target to $destination"
+    else
+        echo "ERROR: $target is missing or has moved. Aborting."
+        exit 1
+    fi
+    
+    count=$((count + 1))
 done
+
+
 
 # Move testing script 'system_up' 
 echo "Place 'system_up' script in root directory"
-ln -s $TESTS/system_up $TESTS/.. 
+ln -s "$TESTS/system_up" "$TESTS/../system_up"
 
-# Extract Test Set
+
+# Extract test sets
 echo "Extracting test sets from $SOURCE_PATH to $TESTS"
 count=0
 while [ "x${TEST_DIRS[count]}" != "x" ]
-	do
-		if ln -s "${TEST_DIRS[count]}" $TESTS
-		then echo linked "${TEST_DIRS[count]}"
-			else echo ERROR: "${TEST_DIRS[count]}" is missing or has moved. Aborting.
-			break
-		fi
-	count=$(( $count + 1 ))
+do
+    # Get the target test set directory path
+    target="${TEST_DIRS[count]}"
+    
+    # Extract the filename from the full path
+    filename=$(basename "$target")
+    
+    # Destination path in $TESTS
+    destination="$TESTS/$filename"
+    
+    # Create symbolic link in the TESTS directory
+    if ln -s "$target" "$destination"
+    then
+        echo "Linked $target to $destination"
+    else
+        echo "ERROR: $target is missing or has moved. Aborting."
+        exit 1
+    fi
+    
+    count=$((count + 1))
 done
+
 
 #
 # Copy modified ION-core version of bpextension.c to original source code
 # Modified bpextension.c support custom build options in build-list.mk
 echo "Replacing bpextension with customized ion-core version in ./scripts"
-cp --remove-destination $SCRIPT_DIR/bpextensions-ion-core.c ./$INC/bpextensions.c
+symlink="$INC/bpextensions.c"
+target=$(ls -l "$symlink" | sed 's/.* -> //')
+cp $SCRIPT_DIR/bpextensions-ion-core.c $target
+echo "Overwritten source file: $target"
 
-# Relative path in #include:
 echo "Updating path to header file bpsecadmin_config.h in file bpsec_policy_rule.c"
-sed -i 's!#include "../../utils/bpsecadmin_config.h"!#include "bpsecadmin_config.h"!g' src/bpsec_policy_rule.c
+
+# Resolve the symlink and apply sed to the target file
+# Some sed do not follow symlinks, so use readlink to get the real path
+symlink="$SRC/bpsec_policy_rule.c"
+target=$(ls -l "$symlink" | sed 's/.* -> //')
+
+# Output the actual target
+sed -i 's!#include "../../utils/bpsecadmin_config.h"!#include "bpsecadmin_config.h"!g' $target
+echo "Apply modification source file: $target"
 
 echo "Done"
 exit

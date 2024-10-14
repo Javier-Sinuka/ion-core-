@@ -1,6 +1,7 @@
 # ION-Core for Linux (and WSL)
 
 - [ION-Core for Linux (and WSL)](#ion-core-for-linux-and-wsl)
+  - [Preliminary Notes](#preliminary-notes)
   - [Build \& Install](#build--install)
     - [Alternative: Automated download of ION Open Source Code _without commit history_](#alternative-automated-download-of-ion-open-source-code-without-commit-history)
   - [Selecting ION-core Features to Build](#selecting-ion-core-features-to-build)
@@ -20,6 +21,16 @@
       - [Tag: `4.1.2b`](#tag-412b)
       - [Tag: `4.1.2a`](#tag-412a)
       - [Tag: `4.1.2`](#tag-412)
+
+## Preliminary Notes
+
+Ion-core assumes the typical Linux OS installation location for `make` and `gcc`. It has not been tested for FreeBSD and MacOS. Future releases will update and test on these platforms.
+
+Each ion-core version is designed to work with the corresponding version of ION Open Source release, e.g., ion-core 4.1.2 uses the ION open-source release version 4.1.2 as its sources.
+
+Ion-core creates absolute path symbolic links to source files from the ION-DTN repo specified by the user. If you move the ION-DTN repo or the ion-core repo, you will need to update the symbolic links by re-running the `extract.sh` script and point to the new location.
+
+As part of the build process, the extract script will modify two ION source files (`bpsec_policy_rule.c`,`bpextension.c`) and place copies inside the `src` folder in ion-core. The original source files in the ION open source repo will not be modified. The modifications are very minor and only to the extend needed to allow ion-core build to turn-on/off selected extension blocks; they do not alter the behavior of extension block handling.
 
 ## Build & Install
 
@@ -44,18 +55,18 @@ git checkout tags/4.1.3
 make clean
 sudo make uninstall
 # build
-./scripts/extract.sh <your-ion-source-code-folder>/ion-open-source-4.1.3
+./scripts/extract.sh <your-ion-source-code-folder>/ion-dtn
 make
 sudo make install
 ```
 
 ### Alternative: Automated download of ION Open Source Code _without commit history_
 
-You can run `./scripts/extract.sh` without supplying the path to an existing ION source code repo. In that case, the script will automatically download the appropriate ION open source code into a `tmp` directory.
+You can run `./scripts/extract.sh` without supplying the path to an existing ION source code repo. In that case, the script will automatically download the appropriate ION open source code version the `tmp` folder under the ion-core directory.
 
 Then you can run `make` and `sudo make install` to install the code.
 
-The disadvantage of this approach is that you will not have the commit history of the ION open source code and not way to submit pull requests to the original ION open source code. This is provided as a convenience for conducting quick testing.
+The disadvantage of this approach is that you will not have the commit history of the ION open source code and not able to submit pull requests. This is provided as a convenience for conducting quick testing.
 
 ## Selecting ION-core Features to Build
 
