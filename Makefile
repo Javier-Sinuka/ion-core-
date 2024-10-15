@@ -59,10 +59,10 @@ _SHARED_OBJ_DIR := $(shell mkdir -p $(LIB)/obj/shared)
 # Right side of ":" is a list of tests to execute, joined by '+'
 # Each test on the right side should appear only once.
 COMBINATION_TESTS := \
-	cfdpadmin+ltpcli+owltsim:bench-cfdp \
-	stcpcli:bench-stcp \
-	udpcli:bench-udp \
-	ltpcli:bench-ltp
+	cfdpadmin+ltpcli+owltsim:bench-cfdp/ \
+	stcpcli:bench-stcp/ \
+	udpcli:bench-udp/ \
+	ltpcli:bench-ltp/
 
 ################################
 # Define build targets

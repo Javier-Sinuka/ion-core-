@@ -363,7 +363,8 @@ TEST_SCRIPTS=(
 	$SOURCE_PATH/tests/runtests
 	$SOURCE_PATH/tests/cleanup
 	$SOURCE_PATH/tests/setacs.sh
-	$SOURCE_PATH/system_up
+	# system_up will be link directly to root folder in ion-core
+	#$SOURCE_PATH/system_up
 )
 
 TEST_DIRS=(
@@ -526,11 +527,9 @@ do
     count=$((count + 1))
 done
 
-
-
-# Move testing script 'system_up' 
-echo "Place 'system_up' script in root directory"
-ln -s "$TESTS/system_up" "$TESTS/../system_up"
+# Link the 'system_up' script 
+echo "Link 'system_up' script in root directory"
+ln -s "$SOURCE_PATH/system_up" "$ROOT_DIR/system_up"
 
 
 # Extract test sets
