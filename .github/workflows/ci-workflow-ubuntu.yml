@@ -30,7 +30,7 @@ jobs:
             make clean
             sudo make uninstall
             make distclean
-            ./script/extract.sh
+            ./scripts/extract.sh
             make
             sudo make install
             sudo make install-lib
