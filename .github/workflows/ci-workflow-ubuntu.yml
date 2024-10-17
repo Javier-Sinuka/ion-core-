@@ -36,7 +36,7 @@ jobs:
             sudo make install-lib
             sudo make man
             make test
-          } > build-and-test.log 2>&1
+          } 2>&1 | tee build-and-test.log
 
       - name: Display Progress
         if: ${{ always() }}  # Display progress even if tests were interrupted
