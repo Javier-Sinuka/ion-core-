@@ -11,7 +11,15 @@ ARCH = 3
 # 32 bits
 #ARCH = 2
 ##################
+# Detect the operating system
+UNAME_S := $(shell uname -s)
 
+# Set OS-specific flag variables
+ifeq ($(UNAME_S), Darwin)
+  OS_FLAGS := -Ddarwin
+else
+  OS_FLAGS := ""
+endif
 ##################
 # FLAGS for Extension for Locally Sourced Bundles
 #
