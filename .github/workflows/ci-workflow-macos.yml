@@ -1,4 +1,4 @@
-name: Regression Test for ion-core on Ubuntu
+name: Regression Test for ion-core on MacOS
 
 on:
   workflow_dispatch:
