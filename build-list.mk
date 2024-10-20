@@ -18,7 +18,7 @@ UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S), Darwin)
   OS_FLAGS := -Ddarwin
 else
-  OS_FLAGS := ""
+  OS_FLAGS := 
 endif
 ##################
 # FLAGS for Extension for Locally Sourced Bundles
