@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: self-hosted, macOS, x64  # Use Ubuntu. Or macos-latest
+    runs-on: [ self-hosted, macOS, x64, 14.7 ]  # Use Ubuntu. Or macos-latest
 
     steps:
       - name: Checkout repository
