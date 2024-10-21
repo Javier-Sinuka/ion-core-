@@ -129,7 +129,7 @@ $(LIB)/obj/shared/%.o: $(SRC)/%.c
 	$(GCC) $(CFLAG) -I$(INC) -c $< $(PLATFORM) $(SHARED_FLAG) -o $@
 
 install:
-	cp -v $(OUT_BIN)/* $(INSTALL_PATH)/bin
+	find $(OUT_BIN) -type f -exec cp -v {} $(INSTALL_PATH)/bin \;
 	cp -v $(OUT_BIN)/ionstart $(INSTALL_PATH)/bin
 	cp -v $(OUT_BIN)/ionstart.awk $(INSTALL_PATH)/bin
 	cp -v $(OUT_BIN)/ionstop $(INSTALL_PATH)/bin
