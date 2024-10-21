@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-SOURCE_PATH="$1"
+SRCMAN="$1" # where symbolic links to .pod files are located
 PROGRAMS="$2"
 
-# Check if SOURCE_PATH is provided
-if [[ -z "$SOURCE_PATH" ]]; then
-  echo "Error: You must supply a relative path to the ION open source code."
+# Check if SRC is provided
+if [[ -z "$SRCMAN" ]]; then
+  echo "Error: You must supply a path to SRC folder."
   exit 1
 fi
 
@@ -16,8 +16,8 @@ if [[ -z "$PROGRAMS" ]]; then
 fi
 
 POD2MAN=pod2man
-POD_DIR="${SOURCE_PATH}/man"
-MAN_OUTPUT_DIR="./man"
+POD_DIR="${SRCMAN}"
+MAN_OUTPUT_DIR="${SRCMAN}/../../man"
 
 # Ensure the man output directory exists
 mkdir -p "$MAN_OUTPUT_DIR"
@@ -26,8 +26,8 @@ mkdir -p "$MAN_OUTPUT_DIR"
 IFS=' ' read -r -a prog_array <<< "$PROGRAMS"
 
 # Debugging output
-echo "SOURCE_PATH = $SOURCE_PATH"
-echo "POD_DIR = $POD_DIR"
+echo "Symbolic Links to .pod files = $POD_DIR"
+echo "Man page output directory = $MAN_OUTPUT_DIR"
 
 for prog in "${prog_array[@]}"; do
     full_path="${POD_DIR}/${prog}.pod"

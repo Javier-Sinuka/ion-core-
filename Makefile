@@ -141,9 +141,11 @@ install-lib:
 	@find $(LIB) -maxdepth 1 -name "*.a" -exec cp -v {} $(INSTALL_PATH)/lib \; || true
 	@find $(LIB) -maxdepth 1 -name "*.so" -exec cp -v {} $(INSTALL_PATH)/lib \; || true
 
+# sym links to original .pod files are in ion-core/src/man
+# generated man page is in ion-core/man
 man:
 	$(info Make "man" target...)
-	./scripts/make-man-pages.sh $(SRC) "$(PROGRAMS)"
+	./scripts/make-man-pages.sh $(SRC)/man "$(PROGRAMS)"
 	find $(MAN) -maxdepth 1 -type f -exec cp -v {} $(INSTALL_PATH)/share/man/man1 \; || true
 
 

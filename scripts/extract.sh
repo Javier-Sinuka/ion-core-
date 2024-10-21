@@ -487,10 +487,10 @@ done
 
 
 # Extract man page .pod files
-echo "Linking man page .pod files from $SOURCE_PATH to $SRC/$MAN"
+echo "Linking man page .pod files from $SOURCE_PATH to $SRC/man"
 
 # Create the directory, if it doesn't exist.
-mkdir -p "$SRC/$MAN"
+mkdir -p "$SRC/man"
 
 count=0
 while [ "x${MANPAGE[count]}" != "x" ]
@@ -502,7 +502,7 @@ do
     filename=$(basename "$target")
     
     # Destination path in $SRC/$MAN
-    destination="$MAN/$filename"
+    destination="$SRC/man/$filename"
     
     # Create symbolic link in the MAN directory
     if ln -s "$target" "$destination"
