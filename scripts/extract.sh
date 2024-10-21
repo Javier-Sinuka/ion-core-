@@ -502,7 +502,7 @@ do
     filename=$(basename "$target")
     
     # Destination path in $SRC/$MAN
-    destination="$SRC/$MAN/$filename"
+    destination="$MAN/$filename"
     
     # Create symbolic link in the MAN directory
     if ln -s "$target" "$destination"
