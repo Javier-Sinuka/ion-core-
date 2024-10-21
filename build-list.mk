@@ -17,7 +17,7 @@ UNAME_S := $(shell uname -s)
 
 # Set OS-specific flag variables
 ifeq ($(UNAME_S), Darwin)
-  OS_FLAGS := -Ddarwin
+  OS_FLAGS := -Ddarwin -Dunix
 else
   OS_FLAGS := 
 endif
