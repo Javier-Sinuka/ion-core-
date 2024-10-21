@@ -22,7 +22,6 @@ SRC_stcpcli := $(SRC)/stcpcli.c \
 	
 
 stcpcli:
-	$(GCC) $(CFLAG) $(SRC_stcpcli) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_stcpcli) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/stcpcli

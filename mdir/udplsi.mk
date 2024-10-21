@@ -20,7 +20,6 @@ SRC_udplsi := $(SRC)/udplsi.c \
 	$(SRC_libici)
 	
 udplsi:
-	$(GCC) $(CFLAG) $(SRC_udplsi) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_udplsi) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/udplsi

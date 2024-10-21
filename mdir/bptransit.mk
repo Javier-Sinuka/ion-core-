@@ -19,8 +19,7 @@ SRC_bptransit := $(SRC)/bptransit.c \
 	$(SRC_libbp)
 
 bptransit:
-	$(GCC) $(CFLAG) $(SRC_bptransit) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_bptransit) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/bptransit
 

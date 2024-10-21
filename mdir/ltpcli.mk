@@ -28,7 +28,6 @@ SRC_ltpcli := $(SRC)/ltpcli.c \
 	$(SRC_libbp)
 
 ltpcli:
-	$(GCC) $(CFLAG) $(SRC_ltpcli) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_ltpcli) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/ltpcli

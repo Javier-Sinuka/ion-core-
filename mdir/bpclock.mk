@@ -19,7 +19,6 @@ SRC_bpclock := $(SRC)/bpclock.c \
 	$(SRC_libbp)
 
 bpclock:
-	$(GCC) $(CFLAG) $(SRC_bpclock) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_bpclock) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/bpclock

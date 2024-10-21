@@ -21,8 +21,7 @@ SRC_stcpclo := $(SRC)/libstcpcla.c \
 	$(SRC_libbp)
 
 stcpclo:
-	$(GCC) $(CFLAG) $(SRC_stcpclo) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_stcpclo) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/stcpclo
 	

@@ -10,7 +10,6 @@ SRC_owltsim := $(SRC)/owltsim.c \
 	$(SRC_libici)
 
 owltsim:
-	$(GCC) $(CFLAG) $(SRC_owltsim) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_owltsim) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/owltsim

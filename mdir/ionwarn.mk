@@ -13,8 +13,7 @@ SRC_ionwarn := \
 	$(SRC_libici)
 
 ionwarn:
-	$(GCC) $(CFLAG) $(SRC_ionwarn) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_ionwarn) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/ionwarn
 

@@ -19,7 +19,6 @@ SRC_bpstats := $(SRC)/bpstats.c \
 	$(SRC_libbp) 
 	
 bpstats:
-	$(GCC) $(CFLAG) $(SRC_bpstats) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_bpstats) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/bpstats

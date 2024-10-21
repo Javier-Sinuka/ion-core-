@@ -19,7 +19,6 @@ SRC_bptrace := $(SRC)/bptrace.c \
 	$(SRC_libbp)
 
 bptrace:
-	$(GCC) $(CFLAG) $(SRC_bptrace) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_bptrace) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/bptrace

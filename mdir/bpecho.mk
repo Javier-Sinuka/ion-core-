@@ -19,8 +19,7 @@ SRC_bpecho := $(SRC)/bpecho.c \
 	$(SRC_libbp) 
 
 bpecho:
-	$(GCC) $(CFLAG) $(SRC_bpecho) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_bpecho) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/bpecho
 

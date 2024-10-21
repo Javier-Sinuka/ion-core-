@@ -13,7 +13,6 @@ SRC_rfxclock := \
 	$(SRC_libici)
 
 rfxclock:
-	$(GCC) $(CFLAG) $(SRC_rfxclock) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_rfxclock) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/rfxclock

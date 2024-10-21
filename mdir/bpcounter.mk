@@ -19,7 +19,6 @@ SRC_bpcounter := $(SRC)/bpcounter.c \
 	$(SRC_libbp) 
 	
 bpcounter:
-	$(GCC) $(CFLAG) $(SRC_bpcounter) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC)  $(SRC_bpcounter) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/bpcounter

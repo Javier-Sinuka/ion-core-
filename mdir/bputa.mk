@@ -28,7 +28,6 @@ SRC_bputa := $(SRC)/bputa.c \
 	$(SRC_libcfdp)
 
 bputa:
-	$(GCC) $(CFLAG) $(SRC_bputa) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_bputa) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/bputa

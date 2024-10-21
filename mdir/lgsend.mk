@@ -19,7 +19,6 @@ SRC_lgsend := $(SRC)/lgsend.c \
 	$(SRC_libbp)
 
 lgsend:
-	$(GCC) $(CFLAG) $(SRC_lgsend) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_lgsend) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/lgsend

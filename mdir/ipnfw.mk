@@ -21,7 +21,6 @@ SRC_ipnfw := $(SRC)/ipnfw.c \
 	$(SRC_libbp)
 
 ipnfw:
-	$(GCC) $(CFLAG) $(SRC_ipnfw) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_ipnfw) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/ipnfw

@@ -20,8 +20,7 @@ SRC_bpadmin := $(SRC)/bpadmin.c \
 
 
 bpadmin:
-	$(GCC) $(CFLAG) $(SRC_bpadmin) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_bpadmin) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/bpadmin
 

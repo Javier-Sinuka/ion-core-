@@ -19,7 +19,6 @@ SRC_bplist := $(SRC)/bplist.c \
 	$(SRC_libbp)
 
 bplist:
-	$(GCC) $(CFLAG) $(SRC_bplist) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_bplist) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/bplist

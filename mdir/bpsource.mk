@@ -19,7 +19,6 @@ SRC_bpsource := $(SRC)/bpsource.c \
 	$(SRC_libbp)
 
 bpsource:
-	$(GCC) $(CFLAG) $(SRC_bpsource) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_bpsource) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/bpsource

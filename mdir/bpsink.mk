@@ -19,7 +19,6 @@ SRC_bpsink := $(SRC)/bpsink.c \
 	$(SRC_libbp) 
 
 bpsink:
-	$(GCC) $(CFLAG) $(SRC_bpsink) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_bpsink) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/bpsink

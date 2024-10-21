@@ -20,7 +20,6 @@ SRC_ipnadminep := $(SRC)/ipnadminep.c \
 	$(SRC_libbp)
 
 ipnadminep:
-	$(GCC) $(CFLAG) $(SRC_ipnadminep) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_ipnadminep) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/ipnadminep

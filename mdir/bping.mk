@@ -19,8 +19,7 @@ SRC_bping := $(SRC)/bping.c \
 	$(SRC_libbp)
 
 bping:
-	$(GCC) $(CFLAG) $(SRC_bping) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_bping) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/bping
 

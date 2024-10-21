@@ -19,8 +19,7 @@ SRC_ltpclock := $(SRC)/ltpclock.c \
 	$(SRC_libici)
 	
 ltpclock:
-	$(GCC) $(CFLAG) $(SRC_ltpclock) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_ltpclock) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/ltpclock
 

@@ -13,7 +13,6 @@ SRC_ionadmin := \
 	$(SRC_libici)
 
 ionadmin:
-	$(GCC) $(CFLAG) $(SRC_ionadmin) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_ionadmin) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/ionadmin

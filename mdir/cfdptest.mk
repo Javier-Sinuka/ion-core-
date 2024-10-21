@@ -28,7 +28,6 @@ SRC_cfdptest := $(SRC)/cfdptest.c \
 	$(SRC_libcfdp)
 
 cfdptest:
-	$(GCC) $(CFLAG) $(SRC_cfdptest) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_cfdptest) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/cfdptest

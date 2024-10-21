@@ -19,7 +19,6 @@ SRC_bprecvfile := $(SRC)/bprecvfile.c \
 	$(SRC_libbp)
 
 bprecvfile:
-	$(GCC) $(CFLAG) $(SRC_bprecvfile) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_bprecvfile) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/bprecvfile

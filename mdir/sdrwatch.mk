@@ -13,7 +13,6 @@ SRC_sdrwatch := \
 	$(SRC_libici)
 
 sdrwatch:
-	$(GCC) $(CFLAG) $(SRC_sdrwatch) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_sdrwatch) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/sdrwatch

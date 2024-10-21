@@ -28,7 +28,6 @@ SRC_cfdpadmin := $(SRC)/cfdpadmin.c \
 	$(SRC_libcfdp)
 
 cfdpadmin:
-	$(GCC) $(CFLAG) $(SRC_cfdpadmin) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_cfdpadmin) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/cfdpadmin

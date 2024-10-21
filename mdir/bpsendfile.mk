@@ -19,7 +19,6 @@ SRC_bpsendfile := $(SRC)/bpsendfile.c \
 	$(SRC_libbp)
 
 bpsendfile:
-	$(GCC) $(CFLAG) $(SRC_bpsendfile) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_bpsendfile) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/bpsendfile

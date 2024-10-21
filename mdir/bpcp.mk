@@ -19,7 +19,6 @@ SRC_bpcp := $(SRC)/bpcp.c \
 	$(SRC_libcfdp)
 
 bpcp:
-	$(GCC) $(CFLAG) $(SRC_bpcp) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_bpcp) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/bpcp

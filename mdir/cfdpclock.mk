@@ -28,7 +28,6 @@ SRC_cfdpclock := $(SRC)/cfdpclock.c \
 	$(SRC_libcfdp)
 
 cfdpclock:
-	$(GCC) $(CFLAG) $(SRC_cfdpclock) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_cfdpclock) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/cfdpclock

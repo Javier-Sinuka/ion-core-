@@ -28,7 +28,6 @@ SRC_ltpadmin := $(SRC)/ltpadmin.c \
 	$(SRC_libici)
 
 ltpadmin:
-	$(GCC) $(CFLAG) $(SRC_ltpadmin) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_ltpadmin) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/ltpadmin

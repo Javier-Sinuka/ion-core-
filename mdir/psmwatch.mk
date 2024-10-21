@@ -8,7 +8,6 @@ SRC_psmwatch := \
 	$(SRC)/sptrace.c
 
 psmwatch:
-	$(GCC) $(CFLAG) $(SRC_psmwatch) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_psmwatch) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/psmwatch

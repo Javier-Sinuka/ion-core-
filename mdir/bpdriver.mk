@@ -19,7 +19,6 @@ SRC_bpdriver := $(SRC)/bpdriver.c \
 	$(SRC_libbp)
 
 bpdriver:
-	$(GCC) $(CFLAG) $(SRC_bpdriver) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_bpdriver) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/bpdriver

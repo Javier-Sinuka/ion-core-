@@ -19,7 +19,6 @@ SRC_lgagent := $(SRC)/lgagent.c \
 	$(SRC_libbp)
 
 lgagent:
-	$(GCC) $(CFLAG) $(SRC_lgagent) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_lgagent) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/lgagent

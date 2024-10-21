@@ -19,7 +19,6 @@ SRC_bpchat := $(SRC)/bpchat.c \
 	$(SRC_libbp)
 
 bpchat:
-	$(GCC) $(CFLAG) $(SRC_bpchat) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_bpchat) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/bpchat

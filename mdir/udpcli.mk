@@ -20,7 +20,6 @@ SRC_udpcli := $(SRC)/udpcli.c \
 	$(SRC_libbp)
 	
 udpcli:
-	$(GCC) $(CFLAG) $(SRC_udpcli) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_udpcli) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/udpcli

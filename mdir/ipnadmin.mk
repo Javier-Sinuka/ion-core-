@@ -20,7 +20,6 @@ SRC_ipnadmin := $(SRC)/ipnadmin.c \
 	$(SRC_libbp)
 
 ipnadmin:
-	$(GCC) $(CFLAG) $(SRC_ipnadmin) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_ipnadmin) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/ipnadmin

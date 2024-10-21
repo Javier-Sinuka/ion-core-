@@ -20,7 +20,6 @@ SRC_ltpdeliv := $(SRC)/ltpdeliv.c \
 	
 
 ltpdeliv:
-	$(GCC) $(CFLAG) $(SRC_ltpdeliv) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_ltpdeliv) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/ltpdeliv

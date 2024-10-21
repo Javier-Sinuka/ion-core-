@@ -38,7 +38,6 @@ SRC_ionrestart := $(SRC)/ionrestart.c \
 	$(SRC_libici) 
 
 ionrestart:
-	$(GCC) $(CFLAG) $(SRC_ionrestart) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_ionrestart) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/ionrestart

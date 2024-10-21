@@ -19,7 +19,6 @@ SRC_bpcancel := $(SRC)/bpcancel.c \
 	$(SRC_libbp)
 
 bpcancel:
-	$(GCC) $(CFLAG) $(SRC_bpcancel) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_bpcancel) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/bpcancel

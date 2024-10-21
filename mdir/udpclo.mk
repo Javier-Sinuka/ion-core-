@@ -20,7 +20,6 @@ SRC_udpclo := $(SRC)/udpclo.c \
 	$(SRC_libbp)
 
 udpclo:
-	$(GCC) $(CFLAG) $(SRC_udpclo) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_udpclo) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/udpclo

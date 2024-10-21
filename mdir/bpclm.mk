@@ -23,7 +23,6 @@ SRC_bpclm := $(SRC)/bpclm.c \
 	$(SRC_libbp) \
 
 bpclm:
-	$(GCC) $(CFLAG) $(SRC_bpclm) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC)  $(SRC_bpclm) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/bpclm

@@ -21,7 +21,6 @@ SRC_udplso := $(SRC)/udplso.c \
 	
 
 udplso:
-	$(GCC) $(CFLAG) $(SRC_udplso) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_udplso) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/udplso

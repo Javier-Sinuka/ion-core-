@@ -29,7 +29,6 @@ SRC_ltpclo := $(SRC)/ltpclo.c \
 	$(SRC_libbp)
 
 ltpclo:
-	$(GCC) $(CFLAG) $(SRC_ltpclo) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_ltpclo) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/ltpclo

@@ -20,8 +20,7 @@ SRC_ltpmeter := $(SRC)/ltpmeter.c \
 	$(SRC_libici)
 
 ltpmeter:
-	$(GCC) $(CFLAG) $(SRC_ltpmeter) \
-	-I$(INC) \
+	$(GCC) $(CFLAG) -I$(INC) $(SRC_ltpmeter) \
 	$(PLATFORM) \
 	-o $(OUT_BIN)/ltpmeter
 
