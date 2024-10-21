@@ -1,15 +1,20 @@
 #!/usr/bin/env bash
 
-# Determine OS type
-UNAME_S := $(shell uname -s)
+# Exit on any error
+set -e
 
-## Update sed syntax for MacOS
-SED_INPLACE :=
-ifeq ($(UNAME_S), Darwin)
-  SED_INPLACE := -i ''
+# Trap any errors and display a message before exiting
+trap 'echo "An error occurred. Exiting..."; exit 1;' ERR
+
+# Determine OS type
+UNAME_S=$(uname -s)
+
+# Update sed syntax for macOS
+if [ "$UNAME_S" = "Darwin" ]; then
+  SED_INPLACE="-i ''"  # macOS requires an empty backup extension with `-i`
 else
-  SED_INPLACE := -i
-endif
+  SED_INPLACE="-i"     # Linux or other systems
+fi
 
 # Display Help Menu
 function display_help() {
@@ -539,6 +544,12 @@ do
 done
 
 # Link the 'system_up' script 
+# Check if system_up symlink or file exists from previous runs and remove it
+if [ -L "$ROOT_DIR/system_up" ] || [ -e "$ROOT_DIR/system_up" ]; then
+  echo "'system_up' already exists. Removing it..."
+  rm -f "$ROOT_DIR/system_up"
+fi
+
 echo "Link 'system_up' script in root directory"
 ln -s "$SOURCE_PATH/system_up" "$ROOT_DIR/system_up"
 
@@ -587,7 +598,7 @@ symlink="$SRC/bpsec_policy_rule.c"
 target=$(ls -l "$symlink" | sed 's/.* -> //')
 
 # Output the actual target
-sed $(SED_INPLACE) 's!#include "../../utils/bpsecadmin_config.h"!#include "bpsecadmin_config.h"!g' $target
+sed $SED_INPLACE 's!#include "../../utils/bpsecadmin_config.h"!#include "bpsecadmin_config.h"!g' $target
 echo "Apply modification source file: $target"
 
 echo "Done"

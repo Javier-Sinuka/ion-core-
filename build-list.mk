@@ -1,3 +1,4 @@
+SHELL := /usr/bin/env bash
 #
 # Build list for ION-core 4.1.3
 #
