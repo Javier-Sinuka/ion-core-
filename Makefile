@@ -129,6 +129,7 @@ $(LIB)/obj/shared/%.o: $(SRC)/%.c
 	$(GCC) $(CFLAG) -I$(INC) -c $< $(PLATFORM) $(SHARED_FLAG) -o $@
 
 install:
+	$(info Make "install" target...)
 	find $(OUT_BIN) -maxdepth 1 -type f -exec cp -v {} $(INSTALL_PATH)/bin \;
 	cp -v $(OUT_BIN)/ionstart $(INSTALL_PATH)/bin
 	cp -v $(OUT_BIN)/ionstart.awk $(INSTALL_PATH)/bin
@@ -136,19 +137,23 @@ install:
 	cp -v $(OUT_BIN)/killm $(INSTALL_PATH)/bin
 
 install-lib:
+	$(info Make "install-lib" target...)
 	@find $(LIB) -maxdepth 1 -name "*.a" -exec cp -v {} $(INSTALL_PATH)/lib \; || true
 	@find $(LIB) -maxdepth 1 -name "*.so" -exec cp -v {} $(INSTALL_PATH)/lib \; || true
 
 man:
+	$(info Make "man" target...)
 	./scripts/make-man-pages.sh $(SRC) "$(PROGRAMS)"
 	find $(MAN) -maxdepth 1 -type f -exec cp -v {} $(INSTALL_PATH)/share/man/man1 \; || true
 
 
 clean:
+	$(info Make "clean" target...)
 	@find $(OUT_BIN) -type f ! -name '.gitkeep' ! -name 'ionstart' ! -name 'ionstart.awk' ! -name 'ionstop' ! -name 'killm' -exec rm -f {} + > /dev/null
 	@find $(LIB) -type f ! -name '.gitkeep' -exec rm -f {} + > /dev/null
 
 test:
+	$(info Make "test" target...)
 	@echo "Processing PROGRAMS list from $(BUILD_LIST)..."
 	@ALL_TESTS_TO_RUN=""; \
 	for combo in $(COMBINATION_TESTS); do \
@@ -176,17 +181,20 @@ test:
 	fi
 
 uninstall:
+	$(info Make "uninstall" target...)
 	@for prog in $(PROGRAMS); do \
 	    rm -f $(INSTALL_PATH)/bin/$$prog; \
 		rm -f $(INSTALL_PATH)/share/man/man1/$$prog*; \
 	done
 
 uninstall-lib:
+	$(info Make "uninstall-lib" target...)
 	@rm -f $(INSTALL_PATH)/lib/*core.a
 	@rm -f $(INSTALL_PATH)/lib/*core.so
 
 ## Clean up all build artifacts + all source files extracted from ION open source code
 distclean:
+	$(info Make "distclean" target...)
 	@find $(INC) -mindepth 1 ! -name '.gitkeep' -exec rm -rf {} + > /dev/null
 	@find $(SRC) -mindepth 1 ! -name '.gitkeep' -exec rm -rf {} + > /dev/null
 	@find $(LIB) -mindepth 1 ! -name '.gitkeep' -exec rm -rf {} + > /dev/null
