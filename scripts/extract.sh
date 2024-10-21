@@ -1,5 +1,16 @@
 #!/usr/bin/env bash
 
+# Determine OS type
+UNAME_S := $(shell uname -s)
+
+## Update sed syntax for MacOS
+SED_INPLACE :=
+ifeq ($(UNAME_S), Darwin)
+  SED_INPLACE := -i ''
+else
+  SED_INPLACE := -i
+endif
+
 # Display Help Menu
 function display_help() {
     echo "Usage: $0 [source_path]"
@@ -576,7 +587,7 @@ symlink="$SRC/bpsec_policy_rule.c"
 target=$(ls -l "$symlink" | sed 's/.* -> //')
 
 # Output the actual target
-sed -i 's!#include "../../utils/bpsecadmin_config.h"!#include "bpsecadmin_config.h"!g' $target
+sed $(SED_INPLACE) 's!#include "../../utils/bpsecadmin_config.h"!#include "bpsecadmin_config.h"!g' $target
 echo "Apply modification source file: $target"
 
 echo "Done"
