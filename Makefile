@@ -129,7 +129,7 @@ $(LIB)/obj/shared/%.o: $(SRC)/%.c
 	$(GCC) $(CFLAG) -I$(INC) -c $< $(PLATFORM) $(SHARED_FLAG) -o $@
 
 install:
-	find $(OUT_BIN) -type f ! -name '*.dSYM' -exec cp -v {} $(INSTALL_PATH)/bin \;
+	find $(OUT_BIN) -maxdepth 1 -type f -exec cp -v {} $(INSTALL_PATH)/bin \;
 	cp -v $(OUT_BIN)/ionstart $(INSTALL_PATH)/bin
 	cp -v $(OUT_BIN)/ionstart.awk $(INSTALL_PATH)/bin
 	cp -v $(OUT_BIN)/ionstop $(INSTALL_PATH)/bin
@@ -141,7 +141,8 @@ install-lib:
 
 man:
 	./scripts/make-man-pages.sh $(SRC) "$(PROGRAMS)"
-	cp -v $(MAN)/* $(INSTALL_PATH)/share/man/man1 || true
+	find $(MAN) -maxdepth 1 -type f -exec cp -v {} $(INSTALL_PATH)/share/man/man1 \; || true
+
 
 clean:
 	@find $(OUT_BIN) -type f ! -name '.gitkeep' ! -name 'ionstart' ! -name 'ionstart.awk' ! -name 'ionstop' ! -name 'killm' -exec rm -f {} + > /dev/null
