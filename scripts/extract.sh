@@ -487,7 +487,7 @@ done
 
 
 # Extract man page .pod files
-echo "Extracting man page .pod files from $SOURCE_PATH to $SRC/$MAN"
+echo "Linking man page .pod files from $SOURCE_PATH to $SRC/$MAN"
 
 # Create the directory, if it doesn't exist.
 mkdir -p "$SRC/$MAN"

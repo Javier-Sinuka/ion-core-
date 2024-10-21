@@ -26,7 +26,8 @@ mkdir -p "$MAN_OUTPUT_DIR"
 IFS=' ' read -r -a prog_array <<< "$PROGRAMS"
 
 for prog in "${prog_array[@]}"; do
-	full_path="${POD_DIR}/$prog.pod"
+	full_path="${POD_DIR}/${prog}.pod"
+	echo "${prog}.pod Path = ${full_path}"
 	if [[ -f "$full_path" ]]; then
 		if $POD2MAN "$full_path" | gzip -c > "${MAN_OUTPUT_DIR}/${prog}.1.gz"; then
 			echo "Generated man page for $prog"
