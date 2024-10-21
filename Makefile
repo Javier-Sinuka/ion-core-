@@ -39,7 +39,7 @@ LIB = $(PWD)/lib
 # BP_EXTENDED is required enables extension blocks required for QoS.
 # EXT_FLAGS is a list of individual extension blocks for locally sourced bundles
 
-export CFLAG = -g -Wall -DSPACE_ORDER=${ARCH} $(OS_FLAGS) -DBP_EXTENDED ${EXT_FLAGS} -lm -pthread
+export CFLAG = -g -Wall -DSPACE_ORDER=${ARCH} $(OS_FLAGS) -DBP_EXTENDED ${EXT_FLAGS}
 export PLATFORM = -lm -pthread
 export SHARED_FLAG = -fPIC
 export GCC = /usr/bin/gcc
@@ -107,26 +107,26 @@ staticlibcfdp: $(STATIC_CFDP_OBJ_FILES)
 
 # Object files compile rule for static library #
 $(LIB)/obj/static/%.o: $(SRC)/%.c
-	$(GCC) $(CFLAG) -I$(INC) -c $< $(PLATFORM) -o $@
+	$(GCC) $(CFLAG) -I$(INC) -c $< -o $@
 
 # dynamic/shared library targets
 shared: $(LIB)/libicicore.so $(LIB)/libbpcore.so $(LIB)/libltpcore.so $(LIB)/libcfdpcore.so
 
 $(LIB)/libicicore.so: $(SHARED_ICI_OBJ_FILES)
-	$(CC) -shared -o $(LIB)/libicicore.so $(SHARED_ICI_OBJ_FILES)
+	$(GCC) -shared -o $(LIB)/libicicore.so $(SHARED_ICI_OBJ_FILES)
 
 $(LIB)/libbpcore.so: $(SHARED_BP_OBJ_FILES)
-	$(CC) -shared -o $(LIB)/libbpcore.so $(SHARED_BP_OBJ_FILES)
+	$(GCC) -shared -o $(LIB)/libbpcore.so $(SHARED_ICI_OBJ_FILES) -L$(LIB) -licicore
 
 $(LIB)/libltpcore.so: $(SHARED_LTP_OBJ_FILES)
-	$(CC) -shared -o $(LIB)/libltpcore.so $(SHARED_LTP_OBJ_FILES)
+	$(GCC) -shared -o $(LIB)/libltpcore.so $(SHARED_ICI_OBJ_FILES) -L$(LIB) -licicore -lbpcore
 
 $(LIB)/libcfdpcore.so: $(SHARED_CFDP_OBJ_FILES)
-	$(CC) -shared -o $(LIB)/libcfdpcore.so $(SHARED_CFDP_OBJ_FILES)
+	$(GCC) -shared -o $(LIB)/libcfdpcore.so $(SHARED_ICI_OBJ_FILES) -L$(LIB) -licicore -lbpcore
 
 # Object files compile rule for shared library #
 $(LIB)/obj/shared/%.o: $(SRC)/%.c
-	$(GCC) $(CFLAG) -I$(INC) -c $< $(PLATFORM) $(SHARED_FLAG) -o $@
+	$(GCC) $(CFLAG) -I$(INC) -c $< $(SHARED_FLAG) -o $@
 
 install:
 	$(info Make "install" target...)
