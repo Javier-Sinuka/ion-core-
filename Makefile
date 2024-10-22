@@ -194,3 +194,6 @@ distclean:
 	@find $(MAN) -mindepth 1 ! -name '.gitkeep' -exec rm -rf {} + > /dev/null
 	@find $(TESTS) -mindepth 1 ! -name '.gitkeep' -exec rm -rf {} + > /dev/null
 	@rm -f system_up > /dev/null
+	@rm -f configs > /dev/null
+	@rm -f scripts/macOS/install_macos_sysctl.sh > /dev/null
+	@rm -f scripts/macOS/sysctl_script.sh > /dev/null
