@@ -379,16 +379,24 @@ TEST_SCRIPTS=(
 	$SOURCE_PATH/tests/runtests
 	$SOURCE_PATH/tests/cleanup
 	$SOURCE_PATH/tests/setacs.sh
+	$SOURCE_PATH/tests/pretest-script
 	# system_up will be link directly to root folder in ion-core
 	#$SOURCE_PATH/system_up
 )
 
+# Loading tests that covers the ion-core function sets
 TEST_DIRS=(
+	# Basic CLAs
 	$SOURCE_PATH/demos/bench-udp
 	$SOURCE_PATH/demos/bench-ltp
 	$SOURCE_PATH/demos/bench-stcp
+	# CFDP & LTP
 	$SOURCE_PATH/demos/bench-cfdp
-#	To Do: Add issue-352-bpcp-ltp and stcp tests for 4.1.3s
+	# BPTRACE & BPSINK & LTP
+	$SOURCE_PATH/tests/bptrace_terminal_test
+	# BPING & BPECHO & UDP
+	$SOURCE_PATH/tests/bping
+	# To Do: Add more tests to cover function set
 )
 
 # Function to clear the content of a directory
@@ -544,15 +552,32 @@ do
 done
 
 # Link the 'system_up' script 
-# Check if system_up symlink or file exists from previous runs and remove it
-if [ -L "$ROOT_DIR/system_up" ] || [ -e "$ROOT_DIR/system_up" ]; then
-  echo "'system_up' already exists. Removing it..."
-  rm -f "$ROOT_DIR/system_up"
-fi
-
 echo "Link 'system_up' script in root directory"
+rm -f "$ROOT_DIR/system_up"
 ln -s "$SOURCE_PATH/system_up" "$ROOT_DIR/system_up"
 
+# For MAC, link the sysctl_script.sh to test kernel setting
+if [ "$UNAME_S" = "Darwin" ]
+then
+	echo "Link 'sysctl_script.sh' in root directory"
+	rm -f "$ROOT_DIR/scripts/macos/sysctl_script.sh"
+	ln -s "$SOURCE_PATH/sysctl_script.sh" "$ROOT_DIR/scripts/macos/sysctl_script.sh"
+	echo "Link 'install_macos_sysctl.sh' in root directory"
+	rm -f "$ROOT_DIR/scripts/macos/install_macos_sysctl.sh"
+	ln -s "$SOURCE_PATH/install_macos_sysctl.sh" "$ROOT_DIR/scripts/macos/install_macos_sysctl.sh"
+fi
+
+# Extract canned test configs
+echo "Linking canned configurations directory 'configs'"
+rm -f "$ROOT_DIR/configs"
+
+if ln -s "$SOURCE_PATH/configs" "$ROOT_DIR/configs"
+then
+    echo "Linked $SOURCE_PATH/configs to $ROOT_DIR/configs"
+else
+    echo "Error: failed to link $SOURCE_PATH/configs to $ROOT_DIR/configs"
+    exit 1
+fi
 
 # Extract test sets
 echo "Extracting test sets from $SOURCE_PATH to $TESTS"
@@ -573,7 +598,7 @@ do
     then
         echo "Linked $target to $destination"
     else
-        echo "ERROR: $target is missing or has moved. Aborting."
+        echo "ERROR: failed to link $target to $destination Aborting."
         exit 1
     fi
     

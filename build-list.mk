@@ -93,3 +93,18 @@ PROGRAMS += owltsim
 # PART III: PLATFORM & BP Extension
 #
 # Work-in-progress
+
+#
+# PART IV: Testing Mapping
+#
+# Specify test list on build-list options
+# Left side of ":" is a list of programs, joined by '+'
+# Right side of ":" is a list of tests to execute, joined by '+'
+# Each test on the right side should appear only once.
+# TO DO: add bench-udp once it is improved for 4.1.4.
+COMBINATION_TESTS := \
+	cfdpadmin+ltpcli+owltsim:bench-cfdp/ \
+	stcpcli:bench-stcp/ \
+	ltpcli:bench-ltp/ \
+  bptrace+bpsink+ltpcli:bptrace_terminal_test/ \
+  bping+bpecho+udpcli:bping/

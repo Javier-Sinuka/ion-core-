@@ -32,6 +32,8 @@ jobs:
             make distclean
             ./scripts/extract.sh
             make
+            make static
+            make shared
             sudo make install
             sudo make install-lib
             sudo make man

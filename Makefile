@@ -54,16 +54,6 @@ MAKE = /usr/bin/make -f
 _STATIC_OBJ_DIR := $(shell mkdir -p $(LIB)/obj/static)
 _SHARED_OBJ_DIR := $(shell mkdir -p $(LIB)/obj/shared)
 
-# Specify test list on build-list options
-# Left side of ":" is a list of programs, joined by '+'
-# Right side of ":" is a list of tests to execute, joined by '+'
-# Each test on the right side should appear only once.
-# TO DO: add bench-udp once it is improved for 4.1.4.
-COMBINATION_TESTS := \
-	cfdpadmin+ltpcli+owltsim:bench-cfdp/ \
-	stcpcli:bench-stcp/ \
-	ltpcli:bench-ltp/
-
 ################################
 # Define build targets
 ################################
