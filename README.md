@@ -252,25 +252,28 @@ The process for building ion-core on macOS follows the same steps as the Linux b
 
 1. The `ldconfig` command is not available on macOS, and not necessary.
 2. Although ion-core can be build on macOS as it is, exerpimentation showed that several default kernel parameters that control shared memory and UDP datagram sizes should be modified in order to support basic ION operations and UDP traffic. Without these modification, ION will not function properly or at all due to resource limitations.
-3. Under the `scripts/macOS` directory, there is a `sysctl_script.sh` script that checks whether these parameters meet or exceed certain minimum levels recommended to run ION. This minimum level is as follows:
+3. __Minimum Recommended Setting:__ Under the `scripts/macOS` directory, there is a `sysctl_script.sh` script that checks whether these parameters meet or exceed certain minimum, recommended values, as follows:
 
     ```bash
     kern.sysv.shmmax = 83886080
     kern.sysv.shmseg = 32
     kern.sysv.shmall = 32768
     net.inet.udp.maxdgram = 32000
-    ``` 
+    ```
 
-4. While these values can support basic ION operations, they may still fail when ION is required to handle more intensive tasks and larger UDP datagrams. Therefore we recommend the following configuration if your system has the resources to support it:
+This set of minimum values are sufficient to pass the regression tests under the `tests` folder in the ION Open Source repository.
+
+4. While the minimum recommended values can support basic ION operations, they are not sufficient to support the more intenstive bench tests under the `demos` folder in the ION Open Source repository. Therefore a more generous configuration is as follows:
   
     ```bash
     kern.sysv.shmmax=2147483648
     kern.sysv.shmseg=32  
     kern.sysv.shmall=1048576 
-    net.inet.udp.maxdgram=65536 
+    net.inet.udp.maxdgram=655360 
     ``` 
-5. For your convenience, you can use the `install_macos_sysctl.sh` script to install this setting in such ways that it will persist through shutdown and reboot. After executing this script, make sure you reboot the system for the changes to take effect.
-6. In the end, we recommend you experiment and adjust these kernel parameters to to fit the specific needs of your DTN application. These scripts provides the basic template on what paramters to check and adjust and how to implement them.
+5. This higher recommended setting, for your convenience, can be implemented using the `install_macos_sysctl.sh` script so that it will persist through shutdown and reboot. After executing this script, make sure you reboot the system for the changes to take effect.
+  * Note: the `net.inet.udp.maxdgram` value is set to 655360 (640KB), 10 times larger than the maximum UDP datagram 65535 (64KB). For reasons not clear at this point, setting this much larger value actually enables smoother handling of UDP datagrams pass them through `localhost`.
+6. In the end, we recommend you experiment and adjust these kernel parameters to fit the specific needs of your application. These scripts provide the basic template on what paramters to check and adjust and how to implement them.
 
 
 
