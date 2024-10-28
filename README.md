@@ -1,6 +1,6 @@
-# ION-Core for Linux (and WSL)
+# ION-Core for Linux (and WSL) & MacOS
 
-- [ION-Core for Linux (and WSL)](#ion-core-for-linux-and-wsl)
+- [ION-Core for Linux (and WSL) \& MacOS](#ion-core-for-linux-and-wsl--macos)
   - [Preliminary Notes](#preliminary-notes)
   - [Build \& Install](#build--install)
     - [Alternative: Automated download of ION Open Source Code _without commit history_](#alternative-automated-download-of-ion-open-source-code-without-commit-history)
@@ -8,12 +8,13 @@
     - [Extension Blocks Build Options](#extension-blocks-build-options)
   - [Man Page Installation](#man-page-installation)
   - [Creating ION configuration (".rc") files for a two-node setup](#creating-ion-configuration-rc-files-for-a-two-node-setup)
-  - [Post installation test](#post-installation-test)
+  - [Post-installation Test](#post-installation-test)
   - [Clean up process](#clean-up-process)
   - [Automated Script to Build, Install, and Test Ion-core on Two Hosts](#automated-script-to-build-install-and-test-ion-core-on-two-hosts)
   - [Adjusting Pre-Allocation of Memory/Storage Space for ION](#adjusting-pre-allocation-of-memorystorage-space-for-ion)
   - [Tuning LTP Performance](#tuning-ltp-performance)
-  - [Building Static Linking Library](#building-static-linking-library)
+  - [Building static and dynamic library](#building-static-and-dynamic-library)
+  - [Prototype: macOS Build](#prototype-macos-build)
   - [Contributing Code](#contributing-code)
   - [WSL2 Networking Issue](#wsl2-networking-issue)
   - [Release Notes](#release-notes)
@@ -24,7 +25,7 @@
 
 ## Preliminary Notes
 
-Ion-core assumes the typical Linux OS installation location for `make` and `gcc`. It has not been tested for FreeBSD and MacOS. Future releases will update and test on these platforms.
+Ion-core assumes the typical Linux OS installation location for `make` and `gcc`. 
 
 Each ion-core version is designed to work with the corresponding version of ION Open Source release, e.g., ion-core 4.1.2 uses the ION open-source release version 4.1.2 as its sources.
 
@@ -58,6 +59,7 @@ sudo make uninstall
 ./scripts/extract.sh <your-ion-source-code-folder>/ion-dtn
 make
 sudo make install
+sudo ldconfig
 ```
 
 ### Alternative: Automated download of ION Open Source Code _without commit history_
@@ -122,7 +124,7 @@ Similar syntax goes for udp.
 
 To use other convergence layers such as UDP or STCP, you will need to modify the .rc files. See the ION documentation for more information. For example, you may consult the [ION Configuration Tutorials and Configuration Templates.](https://nasa-jpl.github.io/ION-DTN/Basic-Configuration-File-Tutorial/)
 
-## Post installation test
+## Post-installation Test
 
 After installation, you can run the following command to test the installation for each of the CLAs included in the build:
 
@@ -130,9 +132,7 @@ After installation, you can run the following command to test the installation f
 make test
 ```
 
-The result of the test will be captured in a file, in the `tests` directory, under the name `progress`. Previous test results will be moved to a new file with date-time stamps.
-
-There are three tests currently available: `bench-ltp`, `bench-stcp`, and `bench-udp`. Each test will be invoked if the corresponding CLA is included in the build. Each test includes attempts to send different combinations of number of bundles and bundle sizes. If all transmissions are successful, the test will be marked as PASSED. If not, the test output on the console as well as the `progress` file will capture data for analysis.
+The result of the test will be captured in a file called `progress` under the `tests` directory.
 
 ## Clean up process
 
@@ -228,9 +228,54 @@ Actual throughput of LTP link protocol depends significantly on the underlying r
 
 In the ION source code's root directory, there is an Excel file named `ION-LTP-configuration_tool.xlsm` which can be used to generate recommended LTP settings for your configuration to maximize the throughput of your system.
 
-## Building Static Linking Library
+## Building static and dynamic library
 
-To build a static linking library for ION, execute the command `make lib`, and the static library `libioncore.a` will be created in the `lib` directory. All the related object files are under the `lib/object` folder.
+To build and install static linking library for ION, execute the following command:
+
+```bash
+# build the static library
+make static
+
+# build the dynamic library
+make shared
+
+# install the libraries
+sudo make install-lib
+
+# uninstall the libraries
+sudo make uninstall-lib
+```
+
+## Prototype: macOS Build
+
+The process for building ion-core on macOS follows the same steps as the Linux build process. However, there are some differences that need to be addressed:
+
+1. The `ldconfig` command is not available on macOS, and not necessary.
+2. Although ion-core can be build on macOS as it is, exerpimentation showed that several default kernel parameters that control shared memory and UDP datagram sizes should be modified in order to support basic ION operations and UDP traffic. Without these modification, ION will not function properly or at all due to resource limitations.
+3. Under the `scripts/macOS` directory, there is a `sysctl_script.sh` script that checks whether these parameters meet or exceed certain minimum levels recommended to run ION. This minimum level is as follows:
+
+    ```bash
+    kern.sysv.shmmax = 83886080
+    kern.sysv.shmseg = 32
+    kern.sysv.shmall = 32768
+    net.inet.udp.maxdgram = 32000
+    ``` 
+
+4. While these values can support basic ION operations, they may still fail when ION is required to handle more intensive tasks and larger UDP datagrams. Therefore we recommend the following configuration if your system has the resources to support it:
+  
+    ```bash
+    kern.sysv.shmmax=2147483648
+    kern.sysv.shmseg=32  
+    kern.sysv.shmall=1048576 
+    net.inet.udp.maxdgram=65536 
+    ``` 
+5. For your convenience, you can use the `install_macos_sysctl.sh` script to install this setting in such ways that it will persist through shutdown and reboot. After executing this script, make sure you reboot the system for the changes to take effect.
+6. In the end, we recommend you experiment and adjust these kernel parameters to to fit the specific needs of your DTN application. These scripts provides the basic template on what paramters to check and adjust and how to implement them.
+
+
+
+
+
 
 ## Contributing Code
 
