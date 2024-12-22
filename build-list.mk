@@ -5,22 +5,22 @@ SHELL := /usr/bin/env bash
 BUILD_LIST_INCLUDED = YES
 
 ################## 
-# Architecture
-#
-# 64 bits (default)
-ARCH = 3
-# 32 bits
-#ARCH = 2
+# Architecture & OS
 ##################
-# Detect the operating system
-UNAME_S := $(shell uname -s)
 
-# Set OS-specific flag variables
-ifeq ($(UNAME_S), Darwin)
-  OS_FLAGS := -Ddarwin -Dunix
-else
-  OS_FLAGS := 
-endif
+# Set OS-specific and HW flags
+# linux 64 bits
+#OS_FLAGS := -Dlinux -DSPACE_ORDER=3 -fno-strict-aliasing
+# linux 32 bits
+OS_FLAGS := -Dlinux -DSPACE_ORDER=2 -fno-strict-aliasing
+# mac 64 bits
+#OS_FLAGS := -Dunix -Ddarwin -DSPACE_ORDER=3 -m64 
+# mac 32 bits
+#OS_FLAGS := -Dunix -Ddarwin -DSPACE_ORDER=3 -m64
+
+
+
+
 ##################
 # FLAGS for Extension for Locally Sourced Bundles
 #
