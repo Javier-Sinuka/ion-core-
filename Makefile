@@ -38,7 +38,7 @@ LIB = $(PWD)/lib
 # BP_EXTENDED is required enables extension blocks required for QoS.
 # EXT_FLAGS is a list of individual extension blocks for locally sourced bundles
 
-export CFLAG = -g -Wall -$(OS_FLAGS) -DBP_EXTENDED ${EXT_FLAGS}
+export CFLAG = -g -Wall $(OS_FLAGS) -DBP_EXTENDED ${EXT_FLAGS}
 export PLATFORM = -lm -pthread
 export SHARED_FLAG = -fPIC
 export GCC = /usr/bin/gcc
