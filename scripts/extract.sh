@@ -48,7 +48,7 @@ ROOT_DIR=$(realpath "$SCRIPT_DIR/..")
 cd "$ROOT_DIR"
 
 # Set the default source
-ION_VER="4.1.3"
+ION_VER="4.1.3s"
 ION_SRC_ZIP=https://github.com/nasa-jpl/ION-DTN/archive/refs/tags/ion-open-source-$ION_VER.tar.gz
 
 # Check if a source path was provided

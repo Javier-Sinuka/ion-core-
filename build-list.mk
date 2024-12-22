@@ -10,9 +10,9 @@ BUILD_LIST_INCLUDED = YES
 
 # Set OS-specific and HW flags
 # linux 64 bits
-#OS_FLAGS := -Dlinux -DSPACE_ORDER=3 -fno-strict-aliasing
+OS_FLAGS := -Dlinux -DSPACE_ORDER=3 -fno-strict-aliasing
 # linux 32 bits
-OS_FLAGS := -Dlinux -DSPACE_ORDER=2 -fno-strict-aliasing
+#OS_FLAGS := -Dlinux -DSPACE_ORDER=2 -fno-strict-aliasing
 # mac 64 bits
 #OS_FLAGS := -Dunix -Ddarwin -DSPACE_ORDER=3 -m64 
 # mac 32 bits
