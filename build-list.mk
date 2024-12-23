@@ -4,29 +4,45 @@ SHELL := /usr/bin/env bash
 #
 BUILD_LIST_INCLUDED = YES
 
-################## 
-# Architecture & OS
-##################
+###################### 
+# Architecture
+# (set automatically)
+######################
 
-# Set OS-specific and HW flags
+# Detect the OS
+UNAME_S := $(shell uname -s)
+UNAME_P := $(shell uname -p) # To determine architecture
 
-# linux 64 bits (tested)
-OS_FLAGS := -Dlinux -DSPACE_ORDER=3 -fno-strict-aliasing
+# Default to unset
+OS_FLAGS :=
 
-# linux 32 bits
-#OS_FLAGS := -Dlinux -DSPACE_ORDER=2 -fno-strict-aliasing
+# Set OS_FLAGS based on OS and architecture
+ifeq ($(UNAME_S), Linux)
+  ifeq ($(UNAME_P), x86_64)
+    OS_FLAGS := -Dlinux -DSPACE_ORDER=3 -fno-strict-aliasing
+  else
+    OS_FLAGS := -Dlinux -DSPACE_ORDER=2 -fno-strict-aliasing
+  endif
+endif
 
-# mac 64 bits
-#OS_FLAGS := -Dunix -Ddarwin -DSPACE_ORDER=3 -m64 
+ifeq ($(UNAME_S), Darwin)
+  ifeq ($(UNAME_P), x86_64)
+    OS_FLAGS := -Dunix -Ddarwin -DSPACE_ORDER=3 -m64
+  else
+    OS_FLAGS := -Dunix -Ddarwin -DSPACE_ORDER=3 -m32
+  endif
+endif
 
-# mac 32 bits
-#OS_FLAGS := -Dunix -Ddarwin -DSPACE_ORDER=3 -m64
+ifeq ($(UNAME_S), FreeBSD)
+  ifeq ($(UNAME_P), amd64)
+    OS_FLAGS := -Dfreebsd -DSPACE_ORDER=3 -m64
+  else
+    OS_FLAGS := -Dfreebsd -DSPACE_ORDER=2 -m32
+  endif
+endif
 
-# freebsd 64 bits
-#OS_FLAGS := -Dfreebsd -DSPACE_ORDER=3 -m64
-
-# freebsd 32 bits
-#OS_FLAGS := -Dfreebsd -DSPACE_ORDER=2 -m32
+# Print the selected OS_FLAGS for debugging
+$(info OS_FLAGS set to: $(OS_FLAGS))
 
 ##################
 # FLAGS for Extension for Locally Sourced Bundles

@@ -1,5 +1,6 @@
 #################################
 # Makefile for ION-Core
+# Require: gmake
 #################################
 
 # bring in the build list
@@ -41,10 +42,7 @@ LIB = $(PWD)/lib
 export CFLAG = -g -Wall $(OS_FLAGS) -DBP_EXTENDED ${EXT_FLAGS}
 export PLATFORM = -lm -pthread
 export SHARED_FLAG = -fPIC
-export GCC = /usr/bin/gcc
-
-# Just locally:
-MAKE = /usr/bin/make -f
+export GCC = $(shell command -v gcc || echo /usr/bin/gcc)
 
 ##########################
 # List of Files

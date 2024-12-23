@@ -9,12 +9,13 @@ trap 'echo "An error occurred. Exiting..."; exit 1;' ERR
 # Determine OS type
 UNAME_S=$(uname -s)
 
-# Update sed syntax for macOS
-if [ "$UNAME_S" = "Darwin" ]; then
-  SED_INPLACE="-i ''"  # macOS requires an empty backup extension with `-i`
+# Update sed syntax for macOS and FreeBSD
+if [ "$UNAME_S" = "Darwin" ] || [ "$UNAME_S" = "FreeBSD" ]; then
+  SED_INPLACE="-i ''"  # macOS and FreeBSD require an empty backup extension with `-i`
 else
   SED_INPLACE="-i"     # Linux or other systems
 fi
+
 
 # Display Help Menu
 function display_help() {
@@ -624,6 +625,9 @@ target=$(ls -l "$symlink" | sed 's/.* -> //')
 
 # Output the actual target
 sed $SED_INPLACE 's!#include "../../utils/bpsecadmin_config.h"!#include "bpsecadmin_config.h"!g' $target
+# for freebsd, need to insert '' for sed
+#sed $SED_INPLACE '' 's!#include "../../utils/bpsecadmin_config.h"!#include "bpsecadmin_config.h"!g' $target
+
 echo "Apply modification source file: $target"
 
 echo "Done"
