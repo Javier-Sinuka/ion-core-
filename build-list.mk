@@ -9,17 +9,24 @@ BUILD_LIST_INCLUDED = YES
 ##################
 
 # Set OS-specific and HW flags
-# linux 64 bits
+
+# linux 64 bits (tested)
 OS_FLAGS := -Dlinux -DSPACE_ORDER=3 -fno-strict-aliasing
+
 # linux 32 bits
 #OS_FLAGS := -Dlinux -DSPACE_ORDER=2 -fno-strict-aliasing
+
 # mac 64 bits
 #OS_FLAGS := -Dunix -Ddarwin -DSPACE_ORDER=3 -m64 
+
 # mac 32 bits
 #OS_FLAGS := -Dunix -Ddarwin -DSPACE_ORDER=3 -m64
 
+# freebsd 64 bits
+#OS_FLAGS := -Dfreebsd -DSPACE_ORDER=3 -m64
 
-
+# freebsd 32 bits
+#OS_FLAGS := -Dfreebsd -DSPACE_ORDER=2 -m32
 
 ##################
 # FLAGS for Extension for Locally Sourced Bundles
