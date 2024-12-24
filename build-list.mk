@@ -11,14 +11,15 @@ BUILD_LIST_INCLUDED = YES
 
 # Detect the OS
 UNAME_S := $(shell uname -s)
-UNAME_M := $(shell uname -m) # To determine architecture
-
+UNAME_M := $(shell uname -m)
+LONGBIT := $(shell getconf LONG_BIT | tr -d ' ')
+#LONGBIT := 32
 # Default to unset
 OS_FLAGS :=
 
-# Set OS_FLAGS based on OS and architecture
+# Set OS_FLAGS based on OS and LONGBIT
 ifeq ($(UNAME_S), Linux)
-  ifneq (,$(findstring 64,$(UNAME_M)))
+  ifeq ($(LONGBIT), 64)
     OS_FLAGS := -Dlinux -DSPACE_ORDER=3 -fno-strict-aliasing
   else
     OS_FLAGS := -Dlinux -DSPACE_ORDER=2 -fno-strict-aliasing
@@ -26,7 +27,7 @@ ifeq ($(UNAME_S), Linux)
 endif
 
 ifeq ($(UNAME_S), Darwin)
-  ifneq (,$(findstring 64,$(UNAME_M)))
+  ifeq ($(LONGBIT), 64)
     OS_FLAGS := -Dunix -Ddarwin -DSPACE_ORDER=3 -m64
   else
     OS_FLAGS := -Dunix -Ddarwin -DSPACE_ORDER=2 -m32
@@ -34,17 +35,15 @@ ifeq ($(UNAME_S), Darwin)
 endif
 
 ifeq ($(UNAME_S), FreeBSD)
-  ifneq (,$(findstring 64,$(UNAME_M)))
+  ifeq ($(LONGBIT), 64)
     OS_FLAGS := -Dfreebsd -DSPACE_ORDER=3 -m64
   else
     OS_FLAGS := -Dfreebsd -DSPACE_ORDER=2 -m32
   endif
 endif
 
-
-
-
 # Print the selected OS_FLAGS for debugging
+$(info OS: $(LONGBIT)-bits $(UNAME_S); HW ARCH: $(UNAME_M))
 $(info OS_FLAGS set to: $(OS_FLAGS))
 
 ##################
