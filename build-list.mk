@@ -11,14 +11,14 @@ BUILD_LIST_INCLUDED = YES
 
 # Detect the OS
 UNAME_S := $(shell uname -s)
-UNAME_P := $(shell uname -p) # To determine architecture
+UNAME_M := $(shell uname -m) # To determine architecture
 
 # Default to unset
 OS_FLAGS :=
 
 # Set OS_FLAGS based on OS and architecture
 ifeq ($(UNAME_S), Linux)
-  ifeq ($(UNAME_P), x86_64)
+  ifneq (,$(findstring 64,$(UNAME_M)))
     OS_FLAGS := -Dlinux -DSPACE_ORDER=3 -fno-strict-aliasing
   else
     OS_FLAGS := -Dlinux -DSPACE_ORDER=2 -fno-strict-aliasing
@@ -26,20 +26,23 @@ ifeq ($(UNAME_S), Linux)
 endif
 
 ifeq ($(UNAME_S), Darwin)
-  ifeq ($(UNAME_P), x86_64)
+  ifneq (,$(findstring 64,$(UNAME_M)))
     OS_FLAGS := -Dunix -Ddarwin -DSPACE_ORDER=3 -m64
   else
-    OS_FLAGS := -Dunix -Ddarwin -DSPACE_ORDER=3 -m32
+    OS_FLAGS := -Dunix -Ddarwin -DSPACE_ORDER=2 -m32
   endif
 endif
 
 ifeq ($(UNAME_S), FreeBSD)
-  ifeq ($(UNAME_P), amd64)
+  ifneq (,$(findstring 64,$(UNAME_M)))
     OS_FLAGS := -Dfreebsd -DSPACE_ORDER=3 -m64
   else
     OS_FLAGS := -Dfreebsd -DSPACE_ORDER=2 -m32
   endif
 endif
+
+
+
 
 # Print the selected OS_FLAGS for debugging
 $(info OS_FLAGS set to: $(OS_FLAGS))
