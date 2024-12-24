@@ -11,3 +11,4 @@ ion.log
 system_up
 tests/*
 .vscode/settings.json
+configs
