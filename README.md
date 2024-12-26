@@ -15,6 +15,7 @@
   - [Tuning LTP Performance](#tuning-ltp-performance)
   - [Building static and dynamic library](#building-static-and-dynamic-library)
   - [Prototype: macOS Build](#prototype-macos-build)
+  - [Prototype: FreeBSD Build Considerations](#prototype-freebsd-build-considerations)
   - [Contributing Code](#contributing-code)
   - [WSL2 Networking Issue](#wsl2-networking-issue)
   - [Release Notes](#release-notes)
@@ -275,10 +276,10 @@ This set of minimum values are sufficient to pass the regression tests under the
   * Note: the `net.inet.udp.maxdgram` value is set to 655360 (640KB), 10 times larger than the maximum UDP datagram 65535 (64KB). For reasons not clear at this point, setting this much larger value actually enables smoother handling of UDP datagrams pass them through `localhost`.
 6. In the end, we recommend you experiment and adjust these kernel parameters to fit the specific needs of your application. These scripts provide the basic template on what paramters to check and adjust and how to implement them.
 
+## Prototype: FreeBSD Build Considerations
 
-
-
-
+1. The default make command for FreeBSD is `bmake.` ION require `gmake`. So you can either invoke `gmake` or create a symbolic link to `gmake` as `make`.
+2. Also the default bash installation locaiton is `/usr/local/bin/bash`. Current ION's test script is hardcoded to the directory `/bin/bash`. You can create a symbolic link of the installed `bash` binary in `/bin`.
 
 ## Contributing Code
 
