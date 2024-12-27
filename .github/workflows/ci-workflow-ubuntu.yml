@@ -2,9 +2,10 @@ name: Regression Test for ion-core on Ubuntu
 
 on:
   workflow_dispatch:
-#  push:
-#    branches:
-#      - update-4.1.3a-symlink
+  push:
+    branches:
+      - update-4.1.3a-symlink
+      - update-4.1.3s-add-os-support
 
 jobs:
   build-and-test:
