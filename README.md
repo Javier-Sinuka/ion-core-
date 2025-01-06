@@ -309,6 +309,14 @@ https://github.com/sakai135/wsl-vpnkit
 
 Latest Release
 
+#### Tag: `4.1.3s-a.1`
+
+1/5/2025
+* First alpha release for 4.1.3s
+* Switch to 4.1.3s ION open source codebase
+* Switch to using symbolic link (instead of copying source code file) to preserve original Git history and support upstream code push to Open Source
+* Improved OS support for compilation 
+
 #### Tag: `4.1.3`
 
 9/24/2024
