@@ -1,7 +1,12 @@
 name: Regression Test for ion-core on MacOS
 
 on:
+  pull_request:
+    branches:
+      - integration
+
   workflow_dispatch:
+
   push:
     branches:
       - update-4.1.3a-symlink
