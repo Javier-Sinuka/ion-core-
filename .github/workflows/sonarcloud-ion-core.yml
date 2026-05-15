@@ -21,12 +21,6 @@ jobs:
 
     env:
       BUILD_WRAPPER_OUT_DIR: build-wrapper-output
-      ION_DTN_DIR: ${{ github.workspace }}/../ION-DTN
-
-      # Ajustar si estás trabajando contra un tag específico.
-      # Para mayor reproducibilidad, conviene usar el tag de ION-DTN compatible
-      # con el tag/branch de ION-CORE que estés analizando.
-      ION_DTN_REF: integration
 
     steps:
       - name: Checkout ION-CORE fork
@@ -43,27 +37,24 @@ jobs:
             make \
             gcc \
             python3 \
+            wget \
             curl \
-            unzip \
-            gpg \
-            dirmngr
-
-      - name: Clone ION-DTN dependency
-        run: |
-          git clone --depth 1 --branch "$ION_DTN_REF" https://github.com/nasa-jpl/ION-DTN.git "$ION_DTN_DIR"
+            unzip
 
       - name: Install Sonar Build Wrapper
         uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v8
 
-      - name: Prepare ION-CORE sources from ION-DTN
+      - name: Prepare ION-CORE sources from compatible ION-DTN version
         run: |
           make clean || true
           make distclean || true
 
-          ./scripts/extract.sh "$ION_DTN_DIR"
+          # Sin argumento: extract.sh descarga la versión ION-DTN esperada por este ion-core.
+          ./scripts/extract.sh
 
-          echo "Extracted ION-CORE source tree:"
-          find src inc mdir tests -maxdepth 2 -type f -o -type l | head -100
+          echo "Checking generated headers..."
+          ls -la inc | head -80
+          test -f inc/ion.h || test -L inc/ion.h
 
       - name: Build ION-CORE with Build Wrapper
         run: |
@@ -78,14 +69,7 @@ jobs:
         run: |
           ls -la "$BUILD_WRAPPER_OUT_DIR" || true
           test -f "$BUILD_WRAPPER_OUT_DIR/build-wrapper.log" && tail -200 "$BUILD_WRAPPER_OUT_DIR/build-wrapper.log" || true
-
-      - name: Optional local test
-        if: false
-        run: |
-          sudo make install
-          sudo make install-lib
-          sudo ldconfig
-          make test
+          test -f "$BUILD_WRAPPER_OUT_DIR/compile_commands.json" && head -40 "$BUILD_WRAPPER_OUT_DIR/compile_commands.json" || true
 
       - name: SonarQube Cloud Scan
         uses: SonarSource/sonarqube-scan-action@v8
