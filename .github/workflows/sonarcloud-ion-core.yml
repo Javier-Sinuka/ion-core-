@@ -1,0 +1,93 @@
+name: Build and Analyze ION-CORE with SonarQube Cloud
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - integration
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  build-and-sonar:
+    name: Build ION-CORE and scan
+    runs-on: ubuntu-latest
+
+    env:
+      BUILD_WRAPPER_OUT_DIR: build-wrapper-output
+      ION_DTN_DIR: ${{ github.workspace }}/../ION-DTN
+
+      # Ajustar si estás trabajando contra un tag específico.
+      # Para mayor reproducibilidad, conviene usar el tag de ION-DTN compatible
+      # con el tag/branch de ION-CORE que estés analizando.
+      ION_DTN_REF: integration
+
+    steps:
+      - name: Checkout ION-CORE fork
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            bash \
+            git \
+            make \
+            gcc \
+            python3 \
+            curl \
+            unzip \
+            gpg \
+            dirmngr
+
+      - name: Clone ION-DTN dependency
+        run: |
+          git clone --depth 1 --branch "$ION_DTN_REF" https://github.com/nasa-jpl/ION-DTN.git "$ION_DTN_DIR"
+
+      - name: Install Sonar Build Wrapper
+        uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v8
+
+      - name: Prepare ION-CORE sources from ION-DTN
+        run: |
+          make clean || true
+          make distclean || true
+
+          ./scripts/extract.sh "$ION_DTN_DIR"
+
+          echo "Extracted ION-CORE source tree:"
+          find src inc mdir tests -maxdepth 2 -type f -o -type l | head -100
+
+      - name: Build ION-CORE with Build Wrapper
+        run: |
+          build-wrapper-linux-x86-64 \
+            --out-dir "$BUILD_WRAPPER_OUT_DIR" \
+            bash -c 'make && make static && make shared'
+
+          test -s "$BUILD_WRAPPER_OUT_DIR/compile_commands.json"
+
+      - name: Show Build Wrapper output files
+        if: always()
+        run: |
+          ls -la "$BUILD_WRAPPER_OUT_DIR" || true
+          test -f "$BUILD_WRAPPER_OUT_DIR/build-wrapper.log" && tail -200 "$BUILD_WRAPPER_OUT_DIR/build-wrapper.log" || true
+
+      - name: Optional local test
+        if: false
+        run: |
+          sudo make install
+          sudo make install-lib
+          sudo ldconfig
+          make test
+
+      - name: SonarQube Cloud Scan
+        uses: SonarSource/sonarqube-scan-action@v8
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
