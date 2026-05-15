@@ -55,6 +55,18 @@ jobs:
           echo "Checking generated headers..."
           ls -la inc | head -80
           test -f inc/ion.h || test -L inc/ion.h
+      
+      - name: Debug extracted files and gitignore behavior
+        run: |
+          echo "Root .gitignore:"
+          cat .gitignore || true
+
+          echo "Examples of generated C files:"
+          find src -maxdepth 1 -name '*.c' | head -20 || true
+
+          echo "Check if generated files are ignored by Git:"
+          git check-ignore -v src/*.c | head -20 || true
+          git check-ignore -v inc/*.h | head -20 || true
 
       - name: Build ION-CORE with Build Wrapper
         run: |
